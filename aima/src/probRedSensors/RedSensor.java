@@ -7,13 +7,13 @@ import IA.Red.Centro;
 import IA.Red.Sensores;
 import IA.Red.Sensor;
 
-public class Algorithm {
+public class RedSensor {
 	private CentrosDatos centroDatos;
 	private Sensores sensores;
 	
-	public Algorithm(int nCentros, int seed) {
-		centroDatos = new CentrosDatos(4, 4);
-		sensores = new Sen
+	public RedSensor(int nCentros, int seedCentros, int nSensores, int seedSensores) {
+		centroDatos = new CentrosDatos(nCentros, seedCentros);
+		sensores = new Sensores(nSensores,seedSensores);
 	}
 	
 	
