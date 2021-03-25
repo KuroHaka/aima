@@ -34,4 +34,9 @@ public class RedSensor {
 		}
 		return array;
 	}
+	
+	public void test() {
+		getSensor().get(1).
+	}
+	
 }
