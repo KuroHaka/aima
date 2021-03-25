@@ -4,6 +4,8 @@ import java.util.Iterator;
 
 import IA.Red.CentrosDatos;
 import IA.Red.Centro;
+import IA.Red.Sensores;
+import IA.Red.Sensor;
 
 public class Algorithm {
 	private CentrosDatos centroDatos;
@@ -11,20 +13,25 @@ public class Algorithm {
 	
 	public Algorithm(int nCentros, int seed) {
 		centroDatos = new CentrosDatos(4, 4);
+		sensores = new Sen
 	}
 	
 	
-	public void printCentros() {
+	public ArrayList<Centro> printCentros() {
+		ArrayList<Centro> array = new ArrayList<>();
 		Iterator it = centroDatos.iterator();
 		while(it.hasNext()) {
-			System.out.println(((Centro)it.next()).toString());
+			array.add((Centro)it.next());
 		}
+		return array;
 	}
 	
-	public void printSensores() {
-		Iterator it = centroDatos.iterator();
+	public ArrayList<Sensor> getSensor() {
+		ArrayList<Sensor> array = new ArrayList<>();
+		Iterator it = sensores.iterator();
 		while(it.hasNext()) {
-			System.out.println(((Centro)it.next()).toString());
+			array.add((Sensor)it.next());
 		}
+		return array;
 	}
 }
