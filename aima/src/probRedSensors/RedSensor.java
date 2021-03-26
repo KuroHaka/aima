@@ -36,7 +36,7 @@ public class RedSensor {
 	}
 	
 	public void test() {
-		getSensor().get(1).
+		
 	}
 	
 }
