@@ -21,7 +21,7 @@ public class FuncionHeuristica {
 		int estimador = 0;
 		
 		for (int i = 0; i < e.size(); i++) {
-			for(int j = 0; j < e.size(); j++) {
+			for(int j = i+1; j < e.size(); j++) {
 				
 				if (e.getConexion(i, j) == 1) {
 					int[] elem1 = {0, 0}, elem2 = {0, 0};
