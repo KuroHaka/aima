@@ -17,7 +17,7 @@ public class RedSensor {
 	}
 	
 	
-	public ArrayList<Centro> printCentros() {
+	public ArrayList<Centro> getCentros() {
 		ArrayList<Centro> array = new ArrayList<>();
 		Iterator it = centroDatos.iterator();
 		while(it.hasNext()) {
