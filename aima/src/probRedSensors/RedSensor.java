@@ -8,31 +8,34 @@ import IA.Red.Sensores;
 import IA.Red.Sensor;
 
 public class RedSensor {
-	private CentrosDatos centroDatos;
-	private Sensores sensores;
+	private ArrayList<Centro> centroDatos;
+	private ArrayList<Sensor> sensores;
 	
 	public RedSensor(int nCentros, int seedCentros, int nSensores, int seedSensores) {
-		centroDatos = new CentrosDatos(nCentros, seedCentros);
-		sensores = new Sensores(nSensores,seedSensores);
+		
+		CentrosDatos cd = new CentrosDatos(nCentros, seedCentros);
+		centroDatos = new ArrayList<>();
+		Iterator<Centro> it = cd.iterator();
+		while(it.hasNext()) {
+			centroDatos.add(it.next());
+		}
+		
+		Sensores s = new Sensores(nSensores,seedSensores);
+		sensores = new ArrayList<>();
+		Iterator<Sensor> it1 = s.iterator();
+		while(it1.hasNext()) {
+			sensores.add(it1.next());
+		}
+		
 	}
 	
 	
 	public ArrayList<Centro> getCentros() {
-		ArrayList<Centro> array = new ArrayList<>();
-		Iterator it = centroDatos.iterator();
-		while(it.hasNext()) {
-			array.add((Centro)it.next());
-		}
-		return array;
+		return centroDatos;
 	}
 	
 	public ArrayList<Sensor> getSensor() {
-		ArrayList<Sensor> array = new ArrayList<>();
-		Iterator it = sensores.iterator();
-		while(it.hasNext()) {
-			array.add((Sensor)it.next());
-		}
-		return array;
+		return sensores;
 	}
 	
 	public void test() {

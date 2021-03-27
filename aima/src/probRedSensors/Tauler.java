@@ -6,13 +6,13 @@ import java.util.Iterator;
 import IA.Red.Centro;
 import IA.Red.Sensor;
 
-public class Estado {
+public class Tauler {
 	
 	private int[][] estado;
 	private ArrayList<Sensor> s;
 	private ArrayList<Centro> c;
 	
-	public Estado(ArrayList<Sensor> s, ArrayList<Centro> c) {
+	public Tauler(ArrayList<Sensor> s, ArrayList<Centro> c) {
 		this.s = s;
 		this.c = c;
 		cajaContenedora();

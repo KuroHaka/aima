@@ -1,20 +1,26 @@
 package probRedSensors;
 
+import java.util.ArrayList;
+
+import IA.Red.Centro;
+import IA.Red.Sensor;
+
 //Author: Ginesta Basart
 
 public class DefinicionEstado {
 	
 	//Implementacion del estado
+	private RedSensor redSensor;
 	private static int numSensores;
 	private static int numCentros;
 	private int[][] estado;
 	
-	public DefinicionEstado(int s, int c){		
-		int dim = s+c;
+	public DefinicionEstado(RedSensor redsensor){
+		this.redSensor = redsensor;
+		numSensores = redsensor.getSensor().size();
+		numCentros = redsensor.getCentros().size();
+		int dim = size();
 		estado = new int[dim][dim];
-		numSensores = s;
-		numCentros = c;
-		
 	}
 	
 	public int[][] actual(){
@@ -37,6 +43,13 @@ public class DefinicionEstado {
 		estado = nuevoActual;
 	}*/
 	
+	public int getConexion(int x, int y) {
+		return estado[y][x];
+	}
+	
+	public RedSensor getRedSensor() {
+		return redSensor;
+	}
 	
 	public int sumaConexiones(int elem) {
 		//Necesario para comprovar la restriccion de conexiones

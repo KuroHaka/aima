@@ -56,6 +56,7 @@ public class GeneradorSolucionInicial {
 	}
 	
 	public void generaSolucionInicial2(DefinicionEstado e) {
+		RedSensor rs = e.getRedSensor();
 		
 		
 	}
