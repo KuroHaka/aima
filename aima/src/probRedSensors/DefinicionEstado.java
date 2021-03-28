@@ -51,6 +51,16 @@ public class DefinicionEstado {
 		return redSensor;
 	}
 	
+	public void printEstados() {
+		System.out.println("-----------------------------------");
+		for(int y = 0; y<size();y++) {
+			for(int x = 0; x<size();x++) {
+				System.out.print(" "+getConexion(x, y));
+			}
+			System.out.println();
+		}
+	}
+	
 	public int sumaConexiones(int elem) {
 		//Necesario para comprovar la restriccion de conexiones
 		int suma = 0;
@@ -74,6 +84,13 @@ public class DefinicionEstado {
 			else System.out.print("No.");
 		}
 		
+	}
+	
+	public void nuevaConexion(Sensor s1, Sensor s2) {
+		nuevaConexion(redSensor.getSensor().indexOf(s1), redSensor.getSensor().indexOf(s2));
+	}
+	public void nuevaConexion(Sensor s, Centro c) {
+		nuevaConexion(redSensor.getSensor().indexOf(s), redSensor.getCentros().indexOf(c)+numSensores);
 	}
 	
 	public void eliminaConexion(int elem1, int elem2) {
