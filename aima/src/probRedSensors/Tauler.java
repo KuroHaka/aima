@@ -1,7 +1,6 @@
 package probRedSensors;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import IA.Red.Centro;
 import IA.Red.Sensor;

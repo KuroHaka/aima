@@ -44,7 +44,7 @@ public class DefinicionEstado {
 	}*/
 	
 	public int getConexion(int x, int y) {
-		return estado[x][y];
+		return estado[y][x];
 	}
 	
 	public RedSensor getRedSensor() {
