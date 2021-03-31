@@ -49,8 +49,7 @@ public class FuncionHeuristica {
 			}
 		}
 		
-		return estimador/2;
-		//se divide entre dos porque las conexiones son bidireccionales. se puede optimizar (y no dejar tan cutre) recorriendo solo una mitad de la matriz espejo
+		return estimador;
 	}
-	
+		
 }
