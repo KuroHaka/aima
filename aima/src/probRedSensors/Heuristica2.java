@@ -1,22 +1,15 @@
 package probRedSensors;
-import java.util.*;
 
 //Author: Ginesta Basart
 
-public class FuncionHeuristica {
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 
-	public FuncionHeuristica() {
-		
-	}
-	
-	private int distancia(int[] elem1, int[] elem2) {
-				
-		int x = (elem1[0] - elem2[0])^2;
-		int y = (elem1[1] - elem2[1])^2;
-		return (int) Math.sqrt(x + y);
-		
-	}
-	
+import aima.search.framework.HeuristicFunction;
+
+public class Heuristica2 implements HeuristicFunction{
+
 	private void recDFS(int v, boolean visited[], LinkedList<Integer> adj[], ArrayList<Integer> red, int count){
         visited[v] = true;
         red.add(v);
@@ -57,48 +50,12 @@ public class FuncionHeuristica {
         }
     }
 	
-	
-	
-	//Implementación de la primera función heurística: suma del coste de todas las connexiones
-	public int funcionHeuristica1(DefinicionEstado e, int valorPaquete) {
-		int estimador = 0;
+	@Override
+	public double getHeuristicValue(Object state) {
 		
-		for (int i = 0; i < e.size(); i++) {
-			for(int j = i+1; j < e.size(); j++) {
-				
-				if (e.getConexion(i, j) == 1) {
-					int[] elem1 = {0, 0}, elem2 = {0, 0};
-					if (i > e.numSensores()) {
-						//elem1 es un centros de dados
-						int aux[] = {e.getRedSensor().getCentros().get(i-e.numSensores()).getCoordX(), e.getRedSensor().getCentros().get(i-e.numSensores()).getCoordY()};
-						elem1 = aux;
-					}
-					else {
-						int aux[] = {e.getRedSensor().getSensor().get(j).getCoordX(), e.getRedSensor().getSensor().get(j).getCoordY()};
-						elem2 = aux;
-					}
-					
-					if (j > e.numSensores()) {
-						//elem2 es un centros de dados
-						int aux[] = {e.getRedSensor().getCentros().get(j-e.numSensores()).getCoordX(), e.getRedSensor().getCentros().get(j-e.numSensores()).getCoordY()};
-						elem2 = aux;
-					}
-					else {
-						int aux[] = {e.getRedSensor().getSensor().get(i).getCoordX(), e.getRedSensor().getSensor().get(i).getCoordY()};
-						elem1 = aux;
-					}
-					estimador += valorPaquete * distancia(elem1, elem2)^2;
-				}
-			}
-		}
+		//Necesita el estado DefinicionEstado e (pasado por parámetro??)
+		double estimador = 0;
 		
-		return estimador;
-	}
-	
-	//Implementación de la segunda función heurística: suma de la cantidad de información de todas las connexiones
-	public int funcionHeuristica2(DefinicionEstado e, int valorPaquete) {
-		int estimador = 0;
-				
 		int numSensores = e.numSensores();
 		
 		ArrayList<ArrayList<Integer>> clusters = new ArrayList<ArrayList<Integer>>();
@@ -149,7 +106,7 @@ public class FuncionHeuristica {
 							}
 							//de major capacitat
 							
-							capacidad_camino = l'altre capacitat;
+							//capacidad_camino = l'altre capacitat;
 							capacidades[k] = capacidad_camino;
 						}
 						
@@ -164,6 +121,7 @@ public class FuncionHeuristica {
 		
 		
 		return estimador;
-	}
 		
+	}
+
 }
