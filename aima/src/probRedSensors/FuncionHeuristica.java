@@ -17,7 +17,7 @@ public class FuncionHeuristica {
 		
 	}
 	
-	private void recDFS(int v, boolean visited[], LinkedList<Integer> adj[], ArrayList<Integer> red, ArrayList<Integer> hojas, int count){
+	private void recDFS(int v, boolean visited[], LinkedList<Integer> adj[], ArrayList<Integer> red, int count){
         visited[v] = true;
         red.add(v);
         
@@ -27,10 +27,10 @@ public class FuncionHeuristica {
             count++;
         	int n = i.next();
             if (!visited[n])
-            	recDFS(n, visited, adj, red, hojas, count);
+            	recDFS(n, visited, adj, red, count);
         }
         if (!i.hasNext()) {
-        	hojas.add(0 - count);
+        	red.add(0-count); //guarda el indice de cada hoja. marcado con un negativo
         }
     }
 
@@ -52,7 +52,7 @@ public class FuncionHeuristica {
         for (int i = nS+1; i <= size; i++) {
         	boolean visited[] = new boolean[size];
         	ArrayList<Integer> redDelSensor = new ArrayList<Integer>();
-        	recDFS(i, visited, adj, redDelSensor, hojas, 0);
+        	recDFS(i, visited, adj, redDelSensor, 0);
         	clusters.add(redDelSensor);
         }
     }
