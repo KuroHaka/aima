@@ -34,7 +34,7 @@ public class FuncionHeuristica {
         }
     }
 
-    private void DFS(int[][] a, int size, int nS, ArrayList<ArrayList<Integer>> clusters, ArrayList<Integer> hojas){
+    private void DFS(int[][] a, int size, int nS, ArrayList<ArrayList<Integer>> clusters){
     	    	
     	LinkedList<Integer> adj[] = new LinkedList[size];
         for (int i = 0; i < size; ++i) adj[i] = new LinkedList();
@@ -102,18 +102,27 @@ public class FuncionHeuristica {
 		int numSensores = e.numSensores();
 		
 		ArrayList<ArrayList<Integer>> clusters = new ArrayList<ArrayList<Integer>>();
-		ArrayList<Integer> hojas = new ArrayList<Integer>();
+
 		
-		DFS(e.actual(), e.size(), numSensores, clusters, hojas);
+		DFS(e.actual(), e.size(), numSensores, clusters);
 			
 		
 		for (int i = 0; i < clusters.size(); i++) {
 			ArrayList<Integer> red = clusters.get(i);
+			ArrayList<Integer> hojas = new ArrayList<Integer>();
 			int[] capacidades = new int[red.size()];
 			//recorremos cada red para asignar las capacidades de casa sensor
 			for(int j = 0; j < red.size(); j++ ) {
-				if (red.get(j) <= numSensores) capacidades[j] = (int) e.getRedSensor().getSensor().get(red.get(j)).getCapacidad();
-				else capacidades[j] = 125;
+				if (red.get(j) > 0) {
+					if (red.get(j) <= numSensores) {
+						capacidades[j] = (int) e.getRedSensor().getSensor().get(red.get(j)).getCapacidad();
+					}
+					else capacidades[j] = 125;
+				}
+				else {
+					hojas.add(-red.get(j));
+					j--;
+				}
 			}
 			
 			//recorremos hojas para encontrar los puntos de entrada de la red y procesar las capacidades
@@ -131,9 +140,19 @@ public class FuncionHeuristica {
 					}
 					else if (capacidades[k] == 125) capacidades[k] = capacidad_camino;
 					else {
-						//si té conectivitat amb un altre sensor de major capacitat
-						//capacidad_camino = l'altre capacitat;
-						//capacidades[k] = capacidad_camino;
+						
+						int idElem = red.get(k);
+						if (red.lastIndexOf(idElem) == red.indexOf(idElem)) {
+							//si té conectivitat amb un altre sensor
+							if (capacidades[(red.get(lastIndexOf(idElem)))]) {
+								
+							}
+							//de major capacitat
+							
+							capacidad_camino = l'altre capacitat;
+							capacidades[k] = capacidad_camino;
+						}
+						
 						
 					}
 				}
