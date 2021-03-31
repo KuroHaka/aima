@@ -144,7 +144,7 @@ public class FuncionHeuristica {
 		
 		
 		
-		return;
+		return estimador;
 	}
 		
 }
