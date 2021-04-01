@@ -1,28 +1,37 @@
 package probRedSensors;
+
+import aima.search.framework.Successor;
+import aima.search.framework.SuccessorFunction;
+
 import java.util.ArrayList;
+import java.util.List;
 
-public class GeneradorSucesoresHillClimbing {
-
-	
-	public GeneradorSucesoresHillClimbing() {
-		
-	}
+public class GeneradorSucesoresHillClimbing implements SuccessorFunction {
 	
 	//Implentacion de la generacion de sucesores para Hill Climbing
-	public ArrayList<DefinicionEstado> sucesores(DefinicionEstado actual, int v) {
-		//v es el valor del paquete a transmitir!!!!!!!!!!
+	public List getSuccessors(Object aState) {
 		
-		ArrayList<DefinicionEstado> r = new ArrayList<DefinicionEstado>();
-		FuncionHeuristica heuristico = new FuncionHeuristica();
-		int h_actual = heuristico.funcionHeuristica1(actual, v);
+		ArrayList r = new ArrayList();
+		DefinicionEstado e = (DefinicionEstado) aState;
 		
-		for(int i = 0; i<actual.size(); i++) {
-			for(int j = i+1; j > actual.size(); j++) {
-				DefinicionEstado hijo = actual;
+		int nSensors = e.numSensores();
+		
+		for(int i = 0; i < nSensors; i++) {
+			for(int j = i+1; j < nSensors; j++) {
+				DefinicionEstado suc_e = e;
+				if (suc_e.getConexion(i, j) == 0) {
+					suc_e.nuevaConexion(i, j);
+					if (suc_e.sumaConexiones(j) == 3) {
+						for(int k = 0; k < nSensors; ++k)
+					}
+					if (suc_e.sumaConexiones(i) == 3)
+						for(int k = 0; k < n)
+						suc_e.eliminaConexion(i);
+					}
 				
 				
 				
-				r.add(hijo);
+				r.add(suc_e);
 			}
 		}
 		

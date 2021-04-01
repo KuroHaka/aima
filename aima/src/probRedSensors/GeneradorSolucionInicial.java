@@ -40,7 +40,7 @@ public class GeneradorSolucionInicial {
 			
 			for (int i = 0; i < numCentros; i++) {
 				for (int j = 0; j < div; j++) {
-					e.nuevaConexion(numSensores+i, j+div*i); //offset de sensores ya asignados a un centro de datos
+					e.creaConexion(numSensores+i, j+div*i); //offset de sensores ya asignados a un centro de datos
 					if(e.sumaConexiones(numSensores+i) > 25) {
 						System.out.print("No vamos nada bien: los sensores no se estan repartiendo entre los centros de datos respetando la limitación de conexiones.");
 						mod = 0;
@@ -55,7 +55,7 @@ public class GeneradorSolucionInicial {
 				for (int i = 0; i < mod; i++) {
 					for (int j = 0; 25*numCentros+1+i <= numSensores && j < 2; j++) {
 						//los asignamos de dos en dos para llegar al tope de conexiones posibles con los sensores ya concectados
-						e.nuevaConexion(25*numCentros+1+i, j+2*i);
+						e.creaConexion(25*numCentros+1+i, j+2*i);
 						if (e.sumaConexiones(25*numCentros+1+i) > 3) {
 							System.out.print("No vamos nada bien: los sensores restantes no se estan repartiendo entre los sensores asignados respetando la limitación de conexiones.");
 							j = 2;
@@ -68,35 +68,7 @@ public class GeneradorSolucionInicial {
 		
 	}
 	
-	/*
 	public void generaSolucionInicial2(DefinicionEstado e) {
-		RedSensor rs = e.getRedSensor();
-		HashMap<Sensor, TreeMap<Double, Centro>> hm = new HashMap<>();
-		Iterator<Sensor> its = rs.getSensor().iterator();
-		Iterator<Centro> itc = rs.getCentros().iterator();
-		
-		while(its.hasNext()) {
-			Sensor s = its.next();
-			itc = rs.getCentros().iterator();
-			TreeMap<Double, Centro> tm = new TreeMap<>();
-			while(itc.hasNext()) {
-				Centro c = itc.next();
-				Double distancia = Math.sqrt(Math.pow(s.getCoordX()-c.getCoordX(), 2) + Math.pow(s.getCoordY()-c.getCoordY(), 2));
-				tm.put(distancia, c);
-			}
-			hm.put(s,tm);
-		}
-		
-		itc = rs.getCentros().iterator();
-		TreeMap<Double, Sensor> tm = new TreeMap<>();
-		while(itc.hasNext()) {
-			Iterator<Entry<Sensor, TreeMap<Double, Centro>>> it = hm.entrySet().iterator();
-			TreeMap<Double, Sensor> tms = new TreeMap<>();
-		}
-		
-	}*/
-	
-	public void generaSolucionInicial3(DefinicionEstado e) {
 		RedSensor rs = e.getRedSensor();
 		ArrayList<Centro> centroDatos = new ArrayList<> (rs.getCentros());
 		ArrayList<Sensor> sensores = new ArrayList<> (rs.getSensor());
@@ -152,7 +124,7 @@ public class GeneradorSolucionInicial {
 			ArrayList<Pair<Sensor,Integer>> connectados = new ArrayList<>();
 			
 			if(!as.isEmpty()) {
-				e.nuevaConexion(as.get(0).first, c);
+				e.creaConexion(as.get(0).first, c);
 				as.get(0).second = as.get(0).second-1;
 				connectados.add(as.get(0));
 				as.remove(0);
@@ -168,13 +140,13 @@ public class GeneradorSolucionInicial {
 					});
 					
 					if(distance(as.get(0).first, s.first) <distance(as.get(0).first, c)) {
-						e.nuevaConexion(as.get(0).first, s.first);
+						e.creaConexion(as.get(0).first, s.first);
 						s.second=s.second-1;
 						if(s.second<=0) 
 							connectados.remove(s);
 					}
 					else {
-						e.nuevaConexion(as.get(0).first, c);
+						e.creaConexion(as.get(0).first, c);
 					}
 					as.get(0).second = as.get(0).second-1;
 					connectados.add(as.get(0));

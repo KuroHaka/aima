@@ -1,127 +1,66 @@
 package probRedSensors;
 
-//Author: Ginesta Basart
-
-import java.util.ArrayList;
+//Author: Zhensheng Chen
 import java.util.Iterator;
-import java.util.LinkedList;
-
+import java.util.Stack;
+import IA.Red.Sensor;
 import aima.search.framework.HeuristicFunction;
 
 public class Heuristica2 implements HeuristicFunction{
-
-	private void recDFS(int v, boolean visited[], LinkedList<Integer> adj[], ArrayList<Integer> red, int count){
-        visited[v] = true;
-        red.add(v);
-        
-        Iterator<Integer> i = adj[v].listIterator();
-        while (i.hasNext())
-        {
-            count++;
-        	int n = i.next();
-            if (!visited[n])
-            	recDFS(n, visited, adj, red, count);
-        }
-        if (!i.hasNext()) {
-        	red.add(0-count); //guarda el indice de cada hoja. marcado con un negativo
-        }
-    }
-
-    private void DFS(int[][] a, int size, int nS, ArrayList<ArrayList<Integer>> clusters){
-    	    	
-    	LinkedList<Integer> adj[] = new LinkedList[size];
-        for (int i = 0; i < size; ++i) adj[i] = new LinkedList();
-    	
-        //recorrido de la matriz espejo
-        for(int i = 0; i < size; i++) {
-        	for(int j = i+1; j < size; j++) {
-        		if (a[i][j] == 1) {
-        			adj[i].add(j);
-        			adj[j].add(i);
-        		}
-        	}
-        }
-              
-        for (int i = nS+1; i <= size; i++) {
-        	boolean visited[] = new boolean[size];
-        	ArrayList<Integer> redDelSensor = new ArrayList<Integer>();
-        	recDFS(i, visited, adj, redDelSensor, 0);
-        	clusters.add(redDelSensor);
-        }
-    }
-	
 	@Override
 	public double getHeuristicValue(Object state) {
-		
 		DefinicionEstado e = (DefinicionEstado) state;
-		double estimador = 0;
-		
-		int numSensores = e.numSensores();
-		
-		ArrayList<ArrayList<Integer>> clusters = new ArrayList<ArrayList<Integer>>();
+		return DFS(e.actual(),e);
+	}
+	
+	private double DFS(int[][] m, DefinicionEstado d) {
+		double coste = 0;
+		for(int y = d.numSensores(); y < m.length; y++) {
+			
+			//DFS por cada centro
+			Stack<Sensor> v = new Stack<>();// visitado
+			Stack<Sensor> nv = new Stack<>();//no visitado
+			for(int x = 0; x < m.length; x++) {
+				if(m[y][x]==1){
+					v.add(d.getRedSensor().getSensor().get(x));
+					nv.add(d.getRedSensor().getSensor().get(x));
+				}
+			}
+			coste += DFSforEach(v,nv,d,m);
+			System.out.println(coste);
+		}
+		return coste;
+	}
+	
+	private double DFSforEach(Stack<Sensor> v,Stack<Sensor> nv, DefinicionEstado d, int[][]m){
+		double coste = 0;
+		Stack<Sensor> nv2 = new Stack<>();
+		Iterator<Sensor> it = nv.iterator();
+		while(it.hasNext() && nv2.size()<2){
+			Sensor actual = it.next();
+			//add Hijos
+			for (int i = 0; i< d.numSensores() ; i++){
+				if(m[d.getRedSensor().getSensor().indexOf(actual)][i]==1){
+					Sensor hijo = d.getRedSensor().getSensor().get(i);
+					if(!v.contains(hijo)){
+						nv2.add(hijo);
+						v.add(hijo);
+					}
+				}
+			}
+			nv.empty();
 
-		
-		DFS(e.actual(), e.size(), numSensores, clusters);
-			
-		
-		for (int i = 0; i < clusters.size(); i++) {
-			ArrayList<Integer> red = clusters.get(i);
-			ArrayList<Integer> hojas = new ArrayList<Integer>();
-			int[] capacidades = new int[red.size()];
-			//recorremos cada red para asignar las capacidades de casa sensor
-			for(int j = 0; j < red.size(); j++ ) {
-				if (red.get(j) > 0) {
-					if (red.get(j) <= numSensores) {
-						capacidades[j] = (int) e.getRedSensor().getSensor().get(red.get(j)).getCapacidad();
-					}
-					else capacidades[j] = 125;
-				}
-				else {
-					hojas.add(-red.get(j));
-					j--;
-				}
+			//llamada recursiva
+			double costeHijos = DFSforEach(v,nv2,d,m);
+			double costePadre = actual.getCapacidad();
+			if (costeHijos<=0) {
+				coste += costePadre;
 			}
-			
-			//recorremos hojas para encontrar los puntos de entrada de la red y procesar las capacidades
-			int hoja_anterior = 0;
-			int id_hoja = -1;
-			int max = 0;
-			for(int j = 0; j < hojas.size(); j++) {
-				hoja_anterior = id_hoja;
-				id_hoja = hojas.get(j);
-				int capacidad_camino = 10;
-				for (int k = id_hoja; k > hoja_anterior; k--) {
-					
-					if (capacidades[k] < capacidad_camino) {
-						capacidad_camino = capacidades[k];
-					}
-					else if (capacidades[k] == 125) capacidades[k] = capacidad_camino;
-					else {
-						
-						int idElem = red.get(k);
-						if (red.lastIndexOf(idElem) == red.indexOf(idElem)) {
-							//si té conectivitat amb un altre sensor
-							if (capacidades[(red.get(lastIndexOf(idElem)))]) {
-								
-							}
-							//de major capacitat
-							
-							//capacidad_camino = l'altre capacitat;
-							capacidades[k] = capacidad_camino;
-						}
-						
-						
-					}
-				}
-				if (capacidad_camino > max) max = capacidad_camino;
-			}
-			if (max > estimador) estimador = max;
+			else
+				coste += costeHijos<costePadre? costeHijos:costePadre;
 		}
 		
-		
-		
-		return estimador;
-		
+		return coste;
 	}
-
+	
 }

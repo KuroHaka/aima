@@ -8,6 +8,5 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="dist/AIMA.jar"/>
 	<classpathentry kind="lib" path="src/RedSensores/redsensores.jar"/>
-	<classpathentry kind="lib" path="D:/UNI/Actuales/IA/Project/jgrapht-1.5.1.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
