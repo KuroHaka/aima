@@ -5,14 +5,6 @@ package probRedSensors;
 import aima.search.framework.HeuristicFunction;
 
 public class Heuristica1 implements HeuristicFunction{
-
-	private int distancia(int[] elem1, int[] elem2) {
-		
-		int x = (elem1[0] - elem2[0])^2;
-		int y = (elem1[1] - elem2[1])^2;
-		return (int) Math.sqrt(x + y);
-		
-	}
 	
 	@Override
 	public double getHeuristicValue(Object state) {
@@ -51,6 +43,14 @@ public class Heuristica1 implements HeuristicFunction{
 		}
 		
 		return estimador;
+	}
+	
+	private int distancia(int[] elem1, int[] elem2) {
+		
+		int x = (elem1[0] - elem2[0])^2;
+		int y = (elem1[1] - elem2[1])^2;
+		return (int) Math.sqrt(x + y);
+		
 	}
 
 }

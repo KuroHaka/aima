@@ -4,16 +4,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map.Entry;
-import java.util.Stack;
-import java.util.TreeMap;
 
 import IA.Red.Centro;
 import IA.Red.Sensor;
 
 
-//Author: Ginesta Basart
+//Author: Ginesta Basart, Zhensheng Chen
 
 public class GeneradorSolucionInicial {
 

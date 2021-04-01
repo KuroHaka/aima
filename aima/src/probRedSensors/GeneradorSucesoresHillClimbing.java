@@ -6,6 +6,8 @@ import aima.search.framework.SuccessorFunction;
 import java.util.ArrayList;
 import java.util.List;
 
+//Author: Liangwei Dong
+
 public class GeneradorSucesoresHillClimbing implements SuccessorFunction {
 	
 	//Implentacion de la generacion de sucesores para Hill Climbing

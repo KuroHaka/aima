@@ -39,11 +39,7 @@ public class DefinicionEstado {
 	public int numCentros() {
 		return numCentros;
 	}
-	
-	/*public void asignaEstadoActual(int[][] nuevoActual) {
-		estado = nuevoActual;
-	}*/
-	
+		
 	public int getConexion(int x, int y) {
 		return estado[y][x];
 	}
@@ -108,22 +104,6 @@ public class DefinicionEstado {
 		}
 		return false;
 	}
-	
-	private boolean esHijo(int elem1, int elem2, Stack<Integer> visitado, boolean foundCentro) {
-		
-		for(int i = 0; i < this.size(); i++) {
-			if (estado[elem1][i] == 1 && !visitado.contains(i)) {
-				if(i > numSensores) foundCentro = true;
-				else {
-					visitado.add(i);
-					if (i == elem2) return false;
-					if(!esHijo(i, elem2, visitado, foundCentro)) return false;	
-				}		
-			}
-		}
-		return foundCentro;
-		//si es false los hijos de elem1 no tendran ningún padre aka centro de datos
-	}
 
 	public void creaConexion(Sensor s1, Sensor s2) {
 		creaConexion(redSensor.getSensor().indexOf(s1), redSensor.getSensor().indexOf(s2));
@@ -164,6 +144,22 @@ public class DefinicionEstado {
 				}		
 			}
 		}
+	}
+		
+	private boolean esHijo(int elem1, int elem2, Stack<Integer> visitado, boolean foundCentro) {
+		
+		for(int i = 0; i < this.size(); i++) {
+			if (estado[elem1][i] == 1 && !visitado.contains(i)) {
+				if(i > numSensores) foundCentro = true;
+				else {
+					visitado.add(i);
+					if (i == elem2) return false;
+					if(!esHijo(i, elem2, visitado, foundCentro)) return false;	
+				}		
+			}
+		}
+		return foundCentro;
+		//si es false los hijos de elem1 no tendran ningún padre aka centro de datos
 	}
 	
 	private boolean eliminaConexionPadre(int elem1, Stack<Integer> visitado) {
