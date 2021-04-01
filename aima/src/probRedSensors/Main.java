@@ -25,6 +25,7 @@ public class Main {
 			public void run() {
 				try {
 					RedSensorJFrame frame = new RedSensorJFrame(de); //<-----------------esta linia pinta el grafo :3
+					frame.setTitle("Solucio Inicial");
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -43,7 +44,29 @@ public class Main {
         GeneradorSolucionInicial gsi = new GeneradorSolucionInicial(e);
 		gsi.generaSolucionInicial2(e); //<----------------------------Cambiar para otra generacion inicial(2)!!!!!!
         RedHillClimbingSearch(e);
+        EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					RedSensorJFrame frame = new RedSensorJFrame(de); //<-----------------esta linia pinta el grafo :3
+					frame.setTitle("Solucion Hill Climbing");
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
         RedSimulatedAnnealingSearch(e);
+        EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					RedSensorJFrame frame = new RedSensorJFrame(de); //<-----------------esta linia pinta el grafo :3
+					frame.setTitle("Solucion Simulated Annealing");
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
     }
 	
 	private static void RedHillClimbingSearch(DefinicionEstado e) {
