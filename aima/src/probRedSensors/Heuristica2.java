@@ -53,7 +53,7 @@ public class Heuristica2 implements HeuristicFunction{
 	@Override
 	public double getHeuristicValue(Object state) {
 		
-		//Necesita el estado DefinicionEstado e (pasado por parámetro??)
+		DefinicionEstado e = (DefinicionEstado) state;
 		double estimador = 0;
 		
 		int numSensores = e.numSensores();

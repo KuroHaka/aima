@@ -17,8 +17,7 @@ public class Heuristica1 implements HeuristicFunction{
 	@Override
 	public double getHeuristicValue(Object state) {
 		
-		//Necesita el estado DefinicionEstado e (pasado por parámetro??)
-		
+		DefinicionEstado e = (DefinicionEstado) state;
 		double estimador = 0;
 		
 		//Suponiendo que el paquete sale de i para ir a j, se transmite la capacidad de i
@@ -46,7 +45,7 @@ public class Heuristica1 implements HeuristicFunction{
 						int aux[] = {e.getRedSensor().getSensor().get(i).getCoordX(), e.getRedSensor().getSensor().get(i).getCoordY()};
 						elem1 = aux;
 					}
-					estimador += e.getRedSensor().getSensor().get(i).getCapacidad() * distancia(elem1, elem2)^2;
+					estimador += e.getRedSensor().getSensor().get(i).getCapacidad() * Math.pow(distancia(elem1, elem2), 2);
 				}
 			}
 		}
