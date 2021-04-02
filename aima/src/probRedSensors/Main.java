@@ -19,7 +19,7 @@ public class Main {
 		RedSensor rd = new RedSensor(4, 1234, 100, 4321);
 		DefinicionEstado de = new DefinicionEstado(rd);
 		GeneradorSolucionInicial gsi = new GeneradorSolucionInicial(de);
-		gsi.generaSolucionInicial2(de);
+		gsi.generaSolucionInicial3(de);
 	
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -32,7 +32,6 @@ public class Main {
 				}
 			}
 		});
-		System.out.print("Hello");
 		Heuristica2 h2 = new Heuristica2();
 		System.out.print(h2.getHeuristicValue(de));
 	}

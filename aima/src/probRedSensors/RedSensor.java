@@ -7,6 +7,7 @@ import IA.Red.Centro;
 import IA.Red.Sensores;
 import IA.Red.Sensor;
 
+//Author: Zhensheng Chen
 public class RedSensor {
 	private ArrayList<Centro> centroDatos;
 	private ArrayList<Sensor> sensores;

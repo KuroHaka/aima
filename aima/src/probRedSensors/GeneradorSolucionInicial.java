@@ -3,9 +3,12 @@ package probRedSensors;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 
@@ -13,7 +16,7 @@ import IA.Red.Centro;
 import IA.Red.Sensor;
 
 
-//Author: Ginesta Basart
+//Author: Ginesta Basart i  Zhensheng Chen
 
 public class GeneradorSolucionInicial {
 
@@ -68,7 +71,7 @@ public class GeneradorSolucionInicial {
 		
 	}
 	
-	public void generaSolucionInicial2(DefinicionEstado e) {
+	public DefinicionEstado generaSolucionInicial2(DefinicionEstado e) {
 		RedSensor rs = e.getRedSensor();
 		ArrayList<Centro> centroDatos = new ArrayList<> (rs.getCentros());
 		ArrayList<Sensor> sensores = new ArrayList<> (rs.getSensor());
@@ -156,7 +159,145 @@ public class GeneradorSolucionInicial {
 			}
 			
 		}
-		e.printEstados();
+		return e;
+	}
+	
+	
+	public DefinicionEstado generaSolucionInicial3(DefinicionEstado e) {
+		RedSensor rs = e.getRedSensor();
+		ArrayList<Centro> centroDatos = new ArrayList<> (rs.getCentros());
+		ArrayList<Sensor> sensores = new ArrayList<> (rs.getSensor());
+		
+		ArrayList<Cluster> res = new ArrayList<>();
+		
+		Iterator <Centro> itc = centroDatos.iterator();
+		while(itc.hasNext()) {
+			res.add(new Cluster(itc.next()));
+		}
+		
+		Iterator<Sensor> its = sensores.iterator();
+		
+		//centro más cercano de cada sensor
+		while(its.hasNext()) {
+			Sensor s = its.next();
+			
+			itc = centroDatos.iterator();
+			Centro c = itc.next();
+			Centro minCent = c;
+			double distMin = Math.sqrt(Math.pow(s.getCoordX()-c.getCoordX(), 2) + Math.pow(s.getCoordY()-c.getCoordY(), 2));
+			while(itc.hasNext()) {
+				c = itc.next();
+				double distance = Math.sqrt(Math.pow(s.getCoordX()-c.getCoordX(), 2) + Math.pow(s.getCoordY()-c.getCoordY(), 2));
+				if(distMin > distance) {
+					distMin = distance;
+					minCent = c;
+				}
+			}
+			res.get(centroDatos.indexOf(minCent)).addSensor(s);
+		}
+		
+		
+		Iterator <Cluster>it = res.iterator();
+		//por cada cluster
+		while(it.hasNext()) {
+			Cluster cluster = it.next();
+			Centro c = cluster.getCentro();
+			ArrayList <Pair<Sensor,Integer>> as = cluster.getCoste5();
+			//ordenamos de cerca a lejos
+			as.sort(new Comparator<Pair<Sensor, Integer>>() {
+				@Override
+				public int compare(Pair<Sensor, Integer> o1, Pair<Sensor, Integer> o2) {
+					return distance(o1.first, c).compareTo(distance(o1.first,c));
+				}
+			});
+			
+			ArrayList<Pair<Sensor,Integer>> connectados = new ArrayList<>();
+			
+			if(!as.isEmpty()) {
+				while(cluster.connexionesRestantes()>0 && !as.isEmpty()) {
+					e.creaConexion(as.get(0).first, c);
+					cluster.CentroDec();
+					as.get(0).second--;
+					connectados.add(as.get(0));
+					as.remove(0);
+				}
+				//iterator sensores conectados
+				Iterator<Pair<Sensor,Integer>> sc = connectados.iterator();
+				//mientras array sensores no esté vacío
+				while(sc.hasNext() && !as.isEmpty()) {
+					Pair<Sensor,Integer> s= sc.next();
+					as.sort(new Comparator<Pair<Sensor, Integer>>() {
+						@Override
+						public int compare(Pair<Sensor, Integer> o1, Pair<Sensor, Integer> o2) {
+							return distance(o1.first, s.first).compareTo(distance(o1.first,s.first));
+						}
+					});
+					
+					if(distance(as.get(0).first, s.first) <distance(as.get(0).first, c)) {
+						e.creaConexion(as.get(0).first, s.first);
+						s.second=s.second-1;
+						if(s.second<=0) 
+							connectados.remove(s);
+					}
+					else {
+						e.creaConexion(as.get(0).first, c);
+					}
+					as.get(0).second = as.get(0).second-1;
+					connectados.add(as.get(0));
+					as.remove(0);
+					sc = connectados.iterator();
+				}
+				as.addAll(cluster.getCoste2());
+				while(sc.hasNext() && !as.isEmpty()) {
+					Pair<Sensor,Integer> s= sc.next();
+					as.sort(new Comparator<Pair<Sensor, Integer>>() {
+						@Override
+						public int compare(Pair<Sensor, Integer> o1, Pair<Sensor, Integer> o2) {
+							return distance(o1.first, s.first).compareTo(distance(o1.first,s.first));
+						}
+					});
+					
+					if(distance(as.get(0).first, s.first) <distance(as.get(0).first, c)) {
+						e.creaConexion(as.get(0).first, s.first);
+						s.second=s.second-1;
+						if(s.second<=0) 
+							connectados.remove(s);
+					}
+					else {
+						e.creaConexion(as.get(0).first, c);
+					}
+					as.get(0).second = as.get(0).second-1;
+					connectados.add(as.get(0));
+					as.remove(0);
+					sc = connectados.iterator();
+				}
+				as.addAll(cluster.getCoste1());
+				while(sc.hasNext() && !as.isEmpty()) {
+					Pair<Sensor,Integer> s= sc.next();
+					as.sort(new Comparator<Pair<Sensor, Integer>>() {
+						@Override
+						public int compare(Pair<Sensor, Integer> o1, Pair<Sensor, Integer> o2) {
+							return distance(o1.first, s.first).compareTo(distance(o1.first,s.first));
+						}
+					});
+					
+					if(distance(as.get(0).first, s.first) <distance(as.get(0).first, c)) {
+						e.creaConexion(as.get(0).first, s.first);
+						s.second=s.second-1;
+						if(s.second<=0) 
+							connectados.remove(s);
+					}
+					else {
+						e.creaConexion(as.get(0).first, c);
+					}
+					as.get(0).second = as.get(0).second-1;
+					connectados.add(as.get(0));
+					as.remove(0);
+					sc = connectados.iterator();
+				}
+			}
+		}
+		return e;
 	}
 	
 	private Double distance(Sensor s, Centro c) {
@@ -165,6 +306,5 @@ public class GeneradorSolucionInicial {
 	private Double distance(Sensor s1, Sensor s2) {
 		return Math.sqrt(Math.pow(s1.getCoordX()-s2.getCoordX(), 2) + Math.pow(s1.getCoordY()-s2.getCoordY(), 2));
 	}
-	
 	
 }

@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+//Author: Zhensheng Chen
 public class RedSensorJFrame extends JFrame {
 	
 	private GraphChartPanel redSensores;

@@ -15,7 +15,7 @@ public class Heuristica2 implements HeuristicFunction{
 	
 	private double DFS(int[][] m, DefinicionEstado d) {
 		double coste = 0;
-		for(int y = d.numSensores(); y < m.length; y++) {
+		for(int y = d.numSensores(); y < d.size(); y++) {
 			
 			//DFS por cada centro
 			Stack<Sensor> v = new Stack<>();// visitado
@@ -27,7 +27,6 @@ public class Heuristica2 implements HeuristicFunction{
 				}
 			}
 			coste += DFSforEach(v,nv,d,m);
-			System.out.println(coste);
 		}
 		return coste;
 	}
@@ -36,7 +35,7 @@ public class Heuristica2 implements HeuristicFunction{
 		double coste = 0;
 		Stack<Sensor> nv2 = new Stack<>();
 		Iterator<Sensor> it = nv.iterator();
-		while(it.hasNext() && nv2.size()<2){
+		while(it.hasNext()){
 			Sensor actual = it.next();
 			//add Hijos
 			for (int i = 0; i< d.numSensores() ; i++){

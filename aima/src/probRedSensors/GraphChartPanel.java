@@ -1,6 +1,7 @@
 package probRedSensors;
 
 import java.awt.Color;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -14,11 +15,18 @@ import org.jfree.data.xy.XYSeries;
 import IA.Red.Centro;
 import IA.Red.Sensor;
 
+
+//Author: Zhensheng Chen
 public class GraphChartPanel extends JPanel{
 	DefinicionEstado d;
+	final int size = 8;
+	final int offset = 15;
+	final int windowSize = 820;
+	final int centrosSize = 20;
+	final int sensoresSize = 20;
 	
 	GraphChartPanel(DefinicionEstado e){
-		this.setPreferredSize(new Dimension(500,500));
+		this.setPreferredSize(new Dimension(windowSize,windowSize));
 		this.d = e;
 	}
 	
@@ -38,28 +46,26 @@ public class GraphChartPanel extends JPanel{
 					else 
 						series.second = new Pair<>(d.getRedSensor().getCentros().get(y-d.numSensores()).getCoordX(),d.getRedSensor().getCentros().get(y-d.numSensores()).getCoordY());
 					
-					Random rand = new Random();
-					float r = rand.nextFloat();
-					float g1 = rand.nextFloat();
-					float b = rand.nextFloat();
-					Color color = new Color(r,g1,b);
-					g2.setPaint(color);
-					g2.drawLine(series.first.first*5, series.first.second*5, series.second.first*5, series.second.second*5);
-					
+					g2.drawLine(offset+series.first.first*size, offset+series.first.second*size, offset+series.second.first*size, offset+series.second.second*size);
 				}
 			}
 		}
 		Iterator<Sensor> it = d.getRedSensor().getSensor().iterator();
-		g2.setPaint(Color.BLACK);
+		
 		while(it.hasNext()){
 			Sensor s = it.next();
-			g2.fillOval(s.getCoordX()*5-5, s.getCoordY()*5-5, 10, 10);
+			int x = offset+s.getCoordX()*size-centrosSize/2;
+			int y = offset+s.getCoordY()*size-centrosSize/2;
+			g2.setPaint(Color.BLACK);
+			g2.fillOval(x, y, centrosSize, centrosSize);
+			g2.setPaint(Color.WHITE);
+			g2.drawString(Integer.toString((int)s.getCapacidad()), x+7, y+15);
 		}
 		Iterator<Centro> it2 = d.getRedSensor().getCentros().iterator();
 		g2.setPaint(Color.RED);
 		while(it2.hasNext()){
 			Centro c = it2.next();
-			g2.fillOval(c.getCoordX()*5-10, c.getCoordY()*5-10, 20, 20);
+			g2.fillOval(offset+c.getCoordX()*size-sensoresSize/2, offset+c.getCoordY()*size-sensoresSize/2, sensoresSize, sensoresSize);
 		}
 	}
 
