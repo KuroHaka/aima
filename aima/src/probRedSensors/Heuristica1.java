@@ -11,7 +11,7 @@ public class Heuristica1 implements HeuristicFunction{
 		
 		DefinicionEstado e = (DefinicionEstado) state;
 		double estimador = 0;
-		
+		double capacidad = 0;
 		//Suponiendo que el paquete sale de i para ir a j, se transmite la capacidad de i
 		for (int i = 0; i < e.size(); i++) {
 			for(int j = i+1; j < e.size(); j++) {
@@ -23,11 +23,12 @@ public class Heuristica1 implements HeuristicFunction{
 						//elem1 es un centros de dados
 						int aux[] = {e.getRedSensor().getCentros().get(i-e.numSensores()).getCoordX(), e.getRedSensor().getCentros().get(i-e.numSensores()).getCoordY()};
 						elem1 = aux;
+						capacidad = 150;
 					}
 					else {
 						int aux[] = {e.getRedSensor().getSensor().get(i).getCoordX(), e.getRedSensor().getSensor().get(i).getCoordY()};
 						elem1 = aux;
-						
+						capacidad = e.getRedSensor().getSensor().get(i).getCapacidad();
 					}
 					
 					if (j >= e.numSensores()) {
@@ -39,7 +40,7 @@ public class Heuristica1 implements HeuristicFunction{
 						int aux[] = {e.getRedSensor().getSensor().get(j).getCoordX(), e.getRedSensor().getSensor().get(j).getCoordY()};
 						elem2 = aux;
 					}
-					estimador += e.getRedSensor().getSensor().get(i).getCapacidad() * Math.pow(distancia(elem1, elem2), 2);
+					estimador += capacidad * Math.pow(distancia(elem1, elem2), 2);
 				}
 			}
 		}
