@@ -26,41 +26,60 @@ public class GeneradorSolucionInicial {
 		int numCentros = e.numCentros();
 		int numSensores = e.numSensores();
 		
-		int div = numSensores/numCentros;
-		int mod = numSensores%numCentros;
-		
-		if (numSensores - 25*div > mod/numSensores/2) {
-			System.out.print("No empezamos bien: Hay demasiados sensores, y no se pueden respetar las restricciones de conexion.");
+		int SxC = 0; //representa la cantidad de sensores que se pueden conectar a un centro de forma equilibrada, o la cantidad maxima por restriccion del problema
+		int sobran = 0;
+		if(numSensores < 25*numCentros) {
+			//Primer caso.
+			SxC = numSensores/numCentros;
+			sobran = numSensores%numCentros;
+		}
+		else if(numSensores == 25*numCentros) {
+			SxC = 25;
+			sobran = 0;
 		}
 		else {
-			
-			for (int i = 0; i < numCentros; i++) {
-				for (int j = 0; j < div; j++) {
-					e.creaConexion(numSensores+i, j+div*i); //offset de sensores ya asignados a un centro de datos
-					if(e.sumaConexiones(numSensores+i) > 25) {
-						System.out.print("No vamos nada bien: los sensores no se estan repartiendo entre los centros de datos respetando la limitación de conexiones.");
-						mod = 0;
-						j = div;
-						i = numCentros;
-					}
-				}
+			//Tercer caso.
+			SxC = 25;
+			sobran = numSensores - 25*numCentros;
+		}
+					
+		for (int i = 0; i < numCentros; i++) {
+			for (int j = 0; j < SxC; j++) {
+				//Conecta el centro de datos con los primeros SxC sensores libres
+				e.creaConexion(numSensores+i, j+SxC*i); //offset de sensores ya asignados a un centro de datos
 			}
+		}
+		
+		if (sobran != 0) {
 			
-			if (mod != 0) {
-				//hay más de 25*numCentros sensores. Hay que repartirlos entre los sensores que ya estan conectados a algun centro (solo tendran una conexion)
-				for (int i = 0; i < mod; i++) {
-					for (int j = 0; 25*numCentros+1+i <= numSensores && j < 2; j++) {
+			if (SxC < 25) {
+				//Primer caso. Hay que repartir los sobrantes entre las conexiones libres de los centros
+				int asignados = SxC*numCentros;
+				int j = 0;
+				int centroAdjudicado = numSensores+j;
+				for(int i = 0; i < sobran; i++) {
+					if (centroAdjudicado > e.size()) j = 0;
+					e.creaConexion(asignados+i, centroAdjudicado);
+					j++;
+				}	
+			}
+			else {
+				//Tercer caso. Hay que repartir los sobrantes entre los sensores que ya estan conectados a algun centro (ya tendran una conexion)
+				for (int i = 0; i < sobran; i++) {
+					int sensorAsignado = 25*numCentros+1+i;
+					for (int j = 0; sensorAsignado < numSensores && j < 2; j++) {
 						//los asignamos de dos en dos para llegar al tope de conexiones posibles con los sensores ya concectados
-						e.creaConexion(25*numCentros+1+i, j+2*i);
+						e.creaConexion(sensorAsignado, j+2*i);
 						if (e.sumaConexiones(25*numCentros+1+i) > 3) {
 							System.out.print("No vamos nada bien: los sensores restantes no se estan repartiendo entre los sensores asignados respetando la limitación de conexiones.");
 							j = 2;
-							i = mod;
+							i = sobran;
 						}
 					}
 				}
 			}
 		}
+		
 		
 	}
 	

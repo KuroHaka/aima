@@ -17,25 +17,27 @@ public class Heuristica1 implements HeuristicFunction{
 			for(int j = i+1; j < e.size(); j++) {
 				
 				if (e.getConexion(i, j) == 1) {
+					
 					int[] elem1 = {0, 0}, elem2 = {0, 0};
-					if (i > e.numSensores()) {
+					if (i >= e.numSensores()) {
 						//elem1 es un centros de dados
 						int aux[] = {e.getRedSensor().getCentros().get(i-e.numSensores()).getCoordX(), e.getRedSensor().getCentros().get(i-e.numSensores()).getCoordY()};
 						elem1 = aux;
 					}
 					else {
-						int aux[] = {e.getRedSensor().getSensor().get(j).getCoordX(), e.getRedSensor().getSensor().get(j).getCoordY()};
-						elem2 = aux;
+						int aux[] = {e.getRedSensor().getSensor().get(i).getCoordX(), e.getRedSensor().getSensor().get(i).getCoordY()};
+						elem1 = aux;
+						
 					}
 					
-					if (j > e.numSensores()) {
+					if (j >= e.numSensores()) {
 						//elem2 es un centros de dados
 						int aux[] = {e.getRedSensor().getCentros().get(j-e.numSensores()).getCoordX(), e.getRedSensor().getCentros().get(j-e.numSensores()).getCoordY()};
 						elem2 = aux;
 					}
 					else {
-						int aux[] = {e.getRedSensor().getSensor().get(i).getCoordX(), e.getRedSensor().getSensor().get(i).getCoordY()};
-						elem1 = aux;
+						int aux[] = {e.getRedSensor().getSensor().get(j).getCoordX(), e.getRedSensor().getSensor().get(j).getCoordY()};
+						elem2 = aux;
 					}
 					estimador += e.getRedSensor().getSensor().get(i).getCapacidad() * Math.pow(distancia(elem1, elem2), 2);
 				}
