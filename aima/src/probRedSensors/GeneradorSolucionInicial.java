@@ -5,18 +5,25 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+<<<<<<< HEAD
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
+=======
+>>>>>>> branch 'master' of https://github.com/KuroHaka/aima.git
 
 import IA.Red.Centro;
 import IA.Red.Sensor;
 
 
+<<<<<<< HEAD
 //Author: Ginesta Basart i  Zhensheng Chen
+=======
+//Author: Ginesta Basart, Zhensheng Chen
+>>>>>>> branch 'master' of https://github.com/KuroHaka/aima.git
 
 public class GeneradorSolucionInicial {
 
