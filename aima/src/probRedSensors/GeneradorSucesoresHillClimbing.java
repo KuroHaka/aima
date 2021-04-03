@@ -26,15 +26,15 @@ public class GeneradorSucesoresHillClimbing implements SuccessorFunction {
 					if (i < nSensors) {
 						if (suc_e.sumaConexiones(i) == 3)
 							suc_e.eliminaConexionPadre(i);
-						else if (suc_e.sumaConexiones(i) == 25)
-							suc_e.eliminaConexionPadre(i);
 					}
+					else if (suc_e.sumaConexiones(i) == 25)
+						suc_e.eliminaConexionPadre(i);
 					if (j < nSensors) {
 						if (suc_e.sumaConexiones(j) == 3)
 							suc_e.eliminaConexionPadre(j);
-						else if (suc_e.sumaConexiones(j) == 25)
-							suc_e.eliminaConexionPadre(j);
 					}
+					else if (suc_e.sumaConexiones(j) == 25)
+						suc_e.eliminaConexionPadre(j);
 					if (suc_e.nuevaConexion(i, j))
 						r.add(suc_e);
 				}
