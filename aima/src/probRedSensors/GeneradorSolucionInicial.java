@@ -2,8 +2,6 @@ package probRedSensors;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 
 import IA.Red.Centro;
@@ -71,7 +69,6 @@ public class GeneradorSolucionInicial {
 						//los asignamos de dos en dos para llegar al tope de conexiones posibles con los sensores ya concectados
 						e.creaConexion(sensorAsignado, j+2*i);
 						if (e.sumaConexiones(25*numCentros+1+i) > 3) {
-							System.out.print("No vamos nada bien: los sensores restantes no se estan repartiendo entre los sensores asignados respetando la limitación de conexiones.");
 							j = 2;
 							i = sobran;
 						}
@@ -84,98 +81,6 @@ public class GeneradorSolucionInicial {
 	}
 	
 	public DefinicionEstado generaSolucionInicial2(DefinicionEstado e) {
-		RedSensor rs = e.getRedSensor();
-		ArrayList<Centro> centroDatos = new ArrayList<> (rs.getCentros());
-		ArrayList<Sensor> sensores = new ArrayList<> (rs.getSensor());
-		
-		HashMap<Centro, ArrayList<Pair<Sensor,Integer>>> res = new HashMap<>();
-		
-		Iterator <Centro> itc = centroDatos.iterator();
-		while(itc.hasNext()) {
-			res.put(itc.next(), new ArrayList<Pair<Sensor,Integer>>());
-		}
-		
-		Iterator<Sensor> its = sensores.iterator();
-		
-		while(its.hasNext()) {
-			
-			Sensor s = its.next();
-			
-			itc = centroDatos.iterator();
-			
-			Centro c = itc.next();
-			Centro minCent = c;
-			double distMin = Math.sqrt(Math.pow(s.getCoordX()-c.getCoordX(), 2) + Math.pow(s.getCoordY()-c.getCoordY(), 2));
-					
-			while(itc.hasNext()) {
-				c = itc.next();
-				double distance = Math.sqrt(Math.pow(s.getCoordX()-c.getCoordX(), 2) + Math.pow(s.getCoordY()-c.getCoordY(), 2));
-				if(distMin > distance) {
-					distMin = distance;
-					minCent = c;
-				}
-			}
-			res.get(minCent).add(new Pair<Sensor, Integer>(s, 3));
-			
-			if(res.get(minCent).size()>=25) {
-				centroDatos.remove(minCent);
-			}
-			
-			sensores.remove(s);
-			its = sensores.iterator();
-		}
-		
-		itc = res.keySet().iterator();
-		while(itc.hasNext()) {
-			Centro c = itc.next();
-			ArrayList <Pair<Sensor,Integer>> as = res.get(c);
-			as.sort(new Comparator<Pair<Sensor, Integer>>() {
-				@Override
-				public int compare(Pair<Sensor, Integer> o1, Pair<Sensor, Integer> o2) {
-					return distance(o1.first, c).compareTo(distance(o1.first,c));
-				}
-			});
-			
-			ArrayList<Pair<Sensor,Integer>> connectados = new ArrayList<>();
-			
-			if(!as.isEmpty()) {
-				e.creaConexion(as.get(0).first, c);
-				as.get(0).second = as.get(0).second-1;
-				connectados.add(as.get(0));
-				as.remove(0);
-				
-				Iterator<Pair<Sensor,Integer>> sc = connectados.iterator();
-				while(sc.hasNext() && !as.isEmpty()) {
-					Pair<Sensor,Integer> s= sc.next();
-					as.sort(new Comparator<Pair<Sensor, Integer>>() {
-						@Override
-						public int compare(Pair<Sensor, Integer> o1, Pair<Sensor, Integer> o2) {
-							return distance(o1.first, s.first).compareTo(distance(o1.first,s.first));
-						}
-					});
-					
-					if(distance(as.get(0).first, s.first) <distance(as.get(0).first, c)) {
-						e.creaConexion(as.get(0).first, s.first);
-						s.second=s.second-1;
-						if(s.second<=0) 
-							connectados.remove(s);
-					}
-					else {
-						e.creaConexion(as.get(0).first, c);
-					}
-					as.get(0).second = as.get(0).second-1;
-					connectados.add(as.get(0));
-					as.remove(0);
-					sc = connectados.iterator();
-				}
-			}
-			
-		}
-		return e;
-	}
-	
-	
-	public DefinicionEstado generaSolucionInicial3(DefinicionEstado e) {
 		RedSensor rs = e.getRedSensor();
 		ArrayList<Centro> centroDatos = new ArrayList<> (rs.getCentros());
 		ArrayList<Sensor> sensores = new ArrayList<> (rs.getSensor());

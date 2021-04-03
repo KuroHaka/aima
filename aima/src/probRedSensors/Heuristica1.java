@@ -12,7 +12,7 @@ public class Heuristica1 implements HeuristicFunction{
 		DefinicionEstado e = (DefinicionEstado) state;
 		double estimador = 0;
 		double capacidad = 0;
-		//Suponiendo que el paquete sale de i para ir a j, se transmite la capacidad de i. Se considera que transmite el maximo posible
+		//Suponiendo que el paquete sale de i para ir a j, se transmite la capacidad de i. Se considera que transmite el maximo posible.
 		for (int i = 0; i < e.size(); i++) {
 			int volumen = 0;
 			for(int j = i+1; j < e.size(); j++) {
