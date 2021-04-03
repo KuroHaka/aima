@@ -16,27 +16,30 @@ public class GeneradorSucesoresHillClimbing implements SuccessorFunction {
 		ArrayList r = new ArrayList();
 		DefinicionEstado e = (DefinicionEstado) aState;
 		
+		int size = e.size();
 		int nSensors = e.numSensores();
 		
-		for(int i = 0; i < nSensors; i++) {
-			for(int j = i+1; j < nSensors; j++) {
+		for(int i = 0; i < size; i++) {
+			for(int j = i+1; j < size; j++) {
 				DefinicionEstado suc_e = e;
 				if (suc_e.getConexion(i, j) == 0) {
-					suc_e.nuevaConexion(i, j);
-					if (suc_e.sumaConexiones(j) == 3) {
-						for(int k = 0; k < nSensors; ++k)
+					if (i < nSensors) {
+						if (suc_e.sumaConexiones(i) == 3)
+							suc_e.eliminaConexionPadre(i);
+						else if (suc_e.sumaConexiones(i) == 25)
+							suc_e.eliminaConexionPadre(i);
 					}
-					if (suc_e.sumaConexiones(i) == 3)
-						for(int k = 0; k < n)
-						suc_e.eliminaConexion(i);
+					if (j < nSensors) {
+						if (suc_e.sumaConexiones(j) == 3)
+							suc_e.eliminaConexionPadre(j);
+						else if (suc_e.sumaConexiones(j) == 25)
+							suc_e.eliminaConexionPadre(j);
 					}
-				
-				
-				
-				r.add(suc_e);
+					if (suc_e.nuevaConexion(i, j))
+						r.add(suc_e);
+				}
 			}
 		}
-		
 		return r;
 	}
 }
