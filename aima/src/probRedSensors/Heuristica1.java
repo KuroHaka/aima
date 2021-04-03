@@ -12,8 +12,9 @@ public class Heuristica1 implements HeuristicFunction{
 		DefinicionEstado e = (DefinicionEstado) state;
 		double estimador = 0;
 		double capacidad = 0;
-		//Suponiendo que el paquete sale de i para ir a j, se transmite la capacidad de i
+		//Suponiendo que el paquete sale de i para ir a j, se transmite la capacidad de i. Se considera que transmite el maximo posible
 		for (int i = 0; i < e.size(); i++) {
+			int volumen = 0;
 			for(int j = i+1; j < e.size(); j++) {
 				
 				if (e.getConexion(i, j) == 1) {
@@ -23,12 +24,12 @@ public class Heuristica1 implements HeuristicFunction{
 						//elem1 es un centros de dados
 						int aux[] = {e.getRedSensor().getCentros().get(i-e.numSensores()).getCoordX(), e.getRedSensor().getCentros().get(i-e.numSensores()).getCoordY()};
 						elem1 = aux;
-						capacidad = 150;
+						capacidad = 125;
 					}
 					else {
 						int aux[] = {e.getRedSensor().getSensor().get(i).getCoordX(), e.getRedSensor().getSensor().get(i).getCoordY()};
 						elem1 = aux;
-						capacidad = e.getRedSensor().getSensor().get(i).getCapacidad();
+						capacidad = e.getRedSensor().getSensor().get(i).getCapacidad() * 3;
 					}
 					
 					if (j >= e.numSensores()) {
