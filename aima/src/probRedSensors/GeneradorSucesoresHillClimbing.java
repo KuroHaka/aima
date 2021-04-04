@@ -13,7 +13,7 @@ public class GeneradorSucesoresHillClimbing implements SuccessorFunction {
 	//Implentacion de la generacion de sucesores para Hill Climbing
 	public List getSuccessors(Object aState) {
 		
-		ArrayList r = new ArrayList();
+		ArrayList<DefinicionEstado> r = new ArrayList<>();
 		DefinicionEstado e = (DefinicionEstado) aState;
 		
 		int size = e.size();

@@ -16,10 +16,10 @@ import aima.search.informed.SimulatedAnnealingSearch;
 public class Main {
 	public static void main(String[] args) {
 		
-		RedSensor rd = new RedSensor(4, 1234, 100, 4321);
+		RedSensor rd = new RedSensor(4, 1234, 200, 4321);
 		DefinicionEstado de = new DefinicionEstado(rd);
 		GeneradorSolucionInicial gsi = new GeneradorSolucionInicial(de);
-		gsi.generaSolucionInicial2(de);
+		gsi.generaSolucionInicial1(de);
 	
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
