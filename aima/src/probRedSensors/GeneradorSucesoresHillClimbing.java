@@ -19,24 +19,97 @@ public class GeneradorSucesoresHillClimbing implements SuccessorFunction {
 		int size = e.size();
 		int nSensors = e.numSensores();
 		
-		for(int i = 0; i < size; i++) {
-			for(int j = i+1; j < size; j++) {
-				DefinicionEstado suc_e = e;
-				if (suc_e.getConexion(i, j) == 0) {
-					if (i < nSensors) {
-						if (suc_e.sumaConexiones(i) == 3)
-							suc_e.eliminaConexionPadre(i);
+		for(int i = 0; i < nSensors; i++) {
+			for(int j = i+1; j < nSensors; j++) {
+				if (e.getConexion(i, j) == 0) {
+					if (e.sumaConexiones(i) >= 3) {
+						for(int k = 0; k < size; ++k) {
+							if (e.getConexion(i, k) == 1) {
+								if (e.sumaConexiones(j) >= 3) {
+									for(int l = 0; l < size; ++l) {
+										if (e.getConexion(j, l) == 1) {
+											DefinicionEstado suc_e = e;
+											if (suc_e.creaConexion(i, j)) {
+												suc_e.eliminaConexion(i, k);
+												suc_e.eliminaConexion(j, l);
+												r.add(suc_e);
+											}
+										}
+									}
+								}
+								else {
+									DefinicionEstado suc_e = e;
+									if (suc_e.creaConexion(i, j)) {
+										suc_e.eliminaConexion(i, k);
+										r.add(suc_e);
+									}
+								}
+							}
+						}
 					}
-					else if (suc_e.sumaConexiones(i) == 25)
-						suc_e.eliminaConexionPadre(i);
-					if (j < nSensors) {
-						if (suc_e.sumaConexiones(j) == 3)
-							suc_e.eliminaConexionPadre(j);
+					else if (e.sumaConexiones(j) >= 3) {
+						for(int l = 0; l < size; ++l) {
+							if (e.getConexion(j, l) == 1) {
+								DefinicionEstado suc_e = e;
+								if (suc_e.creaConexion(i, j)) {
+									suc_e.eliminaConexion(j, l);
+									r.add(suc_e);
+								}
+							}
+						}
 					}
-					else if (suc_e.sumaConexiones(j) == 25)
-						suc_e.eliminaConexionPadre(j);
-					if (suc_e.nuevaConexion(i, j))
-						r.add(suc_e);
+					else {
+						DefinicionEstado suc_e = e;
+						if (suc_e.creaConexion(i, j)) {
+							r.add(suc_e);
+						}
+					}
+				}
+			}
+			for(int j = nSensors; j < size; j++) {
+				if (e.getConexion(i, j) == 0) {
+					if (e.sumaConexiones(i) >= 3) {
+						for(int k = 0; k < size; ++k) {
+							if (e.getConexion(i, k) == 1) {
+								if (e.sumaConexiones(j) >= 25) {
+									for(int l = 0; l < size; ++l) {
+										if (e.getConexion(j, l) == 1) {
+											DefinicionEstado suc_e = e;
+											if (suc_e.creaConexion(i, j)) {
+												suc_e.eliminaConexion(i, k);
+												suc_e.eliminaConexion(j, l);
+												r.add(suc_e);
+											}
+										}
+									}
+								}
+								else {
+									DefinicionEstado suc_e = e;
+									if (suc_e.creaConexion(i, j)) {
+										suc_e.eliminaConexion(i, k);
+										r.add(suc_e);
+									}
+								}
+							}
+						}
+					}
+					else if (e.sumaConexiones(j) >= 25) {
+						for(int l = 0; l < size; ++l) {
+							if (e.getConexion(j, l) == 1) {
+								DefinicionEstado suc_e = e;
+								if (suc_e.creaConexion(i, j)) {
+									suc_e.eliminaConexion(j, l);
+									r.add(suc_e);
+								}
+							}
+						}
+					}
+					else {
+						DefinicionEstado suc_e = e;
+						if (suc_e.creaConexion(i, j)) {
+							r.add(suc_e);
+						}
+					}
 				}
 			}
 		}
