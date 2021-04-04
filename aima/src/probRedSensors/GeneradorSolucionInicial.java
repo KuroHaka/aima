@@ -63,16 +63,22 @@ public class GeneradorSolucionInicial {
 			}
 			else {
 				//Tercer caso. Hay que repartir los sobrantes entre los sensores que ya estan conectados a algun centro (ya tendran una conexion)
+				int sensorAsignado = 0;
 				for (int i = 0; i < sobran; i++) {
-					int sensorAsignado = 25*numCentros+1+i;
-					for (int j = 0; sensorAsignado < numSensores && j < 2; j++) {
-						//los asignamos de dos en dos para llegar al tope de conexiones posibles con los sensores ya concectados
-						e.creaConexion(sensorAsignado, j+2*i);
-						if (e.sumaConexiones(25*numCentros+1+i) > 3) {
-							j = 2;
-							i = sobran;
-						}
+					int sensorElegido = 25*numCentros+1+i; //sobrante escogido
+					if (e.sumaConexiones(sensorAsignado) < 3) {
+						e.creaConexion(sensorElegido, sensorAsignado);
+						if (e.sumaConexiones(sensorAsignado) < 3 && i + 1 != sobran) {
+							i++;
+							sensorElegido = 25*numCentros+1+i;
+							e.creaConexion(sensorElegido, sensorAsignado);
+						}						
 					}
+					else {
+						sensorAsignado++;
+						i--;
+					}
+
 				}
 			}
 		}
