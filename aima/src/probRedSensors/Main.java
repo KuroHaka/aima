@@ -16,10 +16,10 @@ import aima.search.informed.SimulatedAnnealingSearch;
 public class Main {
 	public static void main(String[] args) {
 		
-		RedSensor rd = new RedSensor(4, 1234, 100, 4321);
+		RedSensor rd = new RedSensor(4, 1234, 2, 4321);
 		DefinicionEstado de = new DefinicionEstado(rd);
 		GeneradorSolucionInicial gsi = new GeneradorSolucionInicial(de);
-		gsi.generaSolucionInicial3(de);
+		gsi.generaSolucionInicial2(de);
 	
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -32,8 +32,10 @@ public class Main {
 				}
 			}
 		});
+		Heuristica1 h1 = new Heuristica1();
+		System.out.println("Coste de transmisión total:  "+h1.getHeuristicValue(de));
 		Heuristica2 h2 = new Heuristica2();
-		System.out.print(h2.getHeuristicValue(de));
+		System.out.println("Aprovechamos "+h2.getHeuristicValue(de)+"mb/s de "+rd.maxCapacidad()+"mb/s");
 	}
 	
 	/*

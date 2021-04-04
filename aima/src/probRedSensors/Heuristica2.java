@@ -26,20 +26,24 @@ public class Heuristica2 implements HeuristicFunction{
 					nv.add(d.getRedSensor().getSensor().get(x));
 				}
 			}
-			coste += DFSforEach(v,nv,d,m);
+			Pair<Double, Double> val = DFSforEach(v,nv,d,m);
+			coste += val.second+val.first;
 		}
 		return coste;
 	}
 	
-	private double DFSforEach(Stack<Sensor> v,Stack<Sensor> nv, DefinicionEstado d, int[][]m){
-		double coste = 0;
-		Stack<Sensor> nv2 = new Stack<>();
+	//Pair.first capacidad accumulada, Pair.second capacidad hijos
+	private Pair<Double,Double> DFSforEach(Stack<Sensor> v,Stack<Sensor> nv, DefinicionEstado d, int[][]m){
+		double capacidadAcc = 0;
+		double capacidadHermanos = 0;
 		Iterator<Sensor> it = nv.iterator();
+		
 		while(it.hasNext()){
+			Stack<Sensor> nv2 = new Stack<>();
 			Sensor actual = it.next();
 			//add Hijos
 			for (int i = 0; i< d.numSensores() ; i++){
-				if(m[d.getRedSensor().getSensor().indexOf(actual)][i]==1){
+				if(m[i][d.getRedSensor().getSensor().indexOf(actual)]==1){
 					Sensor hijo = d.getRedSensor().getSensor().get(i);
 					if(!v.contains(hijo)){
 						nv2.add(hijo);
@@ -48,18 +52,23 @@ public class Heuristica2 implements HeuristicFunction{
 				}
 			}
 			nv.empty();
-
+			
 			//llamada recursiva
-			double costeHijos = DFSforEach(v,nv2,d,m);
-			double costePadre = actual.getCapacidad();
-			if (costeHijos<=0) {
-				coste += costePadre;
+			Pair<Double, Double> val = DFSforEach(v,nv2,d,m);
+			double costeHijos = val.second;
+			capacidadAcc += val.first;
+			double costeMio = actual.getCapacidad();
+			
+			if (costeHijos<=0) 
+				capacidadHermanos += costeMio;
+			else {
+				capacidadAcc += costeHijos<costeMio? costeHijos:costeMio;
+				capacidadHermanos += costeMio;
 			}
-			else
-				coste += costeHijos<costePadre? costeHijos:costePadre;
+			
 		}
 		
-		return coste;
+		return new Pair<>(capacidadAcc,capacidadHermanos);
 	}
 	
 }

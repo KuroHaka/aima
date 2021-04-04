@@ -115,6 +115,7 @@ public class GeneradorSolucionInicial {
 		
 		
 		Iterator <Cluster>it = res.iterator();
+		
 		//por cada cluster
 		while(it.hasNext()) {
 			Cluster cluster = it.next();
@@ -124,9 +125,27 @@ public class GeneradorSolucionInicial {
 			as.sort(new Comparator<Pair<Sensor, Integer>>() {
 				@Override
 				public int compare(Pair<Sensor, Integer> o1, Pair<Sensor, Integer> o2) {
-					return distance(o1.first, c).compareTo(distance(o1.first,c));
+					return distance(o1.first, c).compareTo(distance(o2.first,c));
 				}
 			});
+			
+			cluster.getCoste2().sort(new Comparator<Pair<Sensor, Integer>>() {
+				@Override
+				public int compare(Pair<Sensor, Integer> o1, Pair<Sensor, Integer> o2) {
+					return distance(o1.first, c).compareTo(distance(o2.first,c));
+				}
+			});
+			
+			cluster.getCoste1().sort(new Comparator<Pair<Sensor, Integer>>() {
+				@Override
+				public int compare(Pair<Sensor, Integer> o1, Pair<Sensor, Integer> o2) {
+					return distance(o1.first, c).compareTo(distance(o2.first,c));
+				}
+			});
+			
+			as.addAll(cluster.getCoste2());
+			as.addAll(cluster.getCoste1());
+			
 			
 			ArrayList<Pair<Sensor,Integer>> connectados = new ArrayList<>();
 			
@@ -141,54 +160,6 @@ public class GeneradorSolucionInicial {
 				//iterator sensores conectados
 				Iterator<Pair<Sensor,Integer>> sc = connectados.iterator();
 				//mientras array sensores no esté vacío
-				while(sc.hasNext() && !as.isEmpty()) {
-					Pair<Sensor,Integer> s= sc.next();
-					as.sort(new Comparator<Pair<Sensor, Integer>>() {
-						@Override
-						public int compare(Pair<Sensor, Integer> o1, Pair<Sensor, Integer> o2) {
-							return distance(o1.first, s.first).compareTo(distance(o1.first,s.first));
-						}
-					});
-					
-					if(distance(as.get(0).first, s.first) <distance(as.get(0).first, c)) {
-						e.creaConexion(as.get(0).first, s.first);
-						s.second=s.second-1;
-						if(s.second<=0) 
-							connectados.remove(s);
-					}
-					else {
-						e.creaConexion(as.get(0).first, c);
-					}
-					as.get(0).second = as.get(0).second-1;
-					connectados.add(as.get(0));
-					as.remove(0);
-					sc = connectados.iterator();
-				}
-				as.addAll(cluster.getCoste2());
-				while(sc.hasNext() && !as.isEmpty()) {
-					Pair<Sensor,Integer> s= sc.next();
-					as.sort(new Comparator<Pair<Sensor, Integer>>() {
-						@Override
-						public int compare(Pair<Sensor, Integer> o1, Pair<Sensor, Integer> o2) {
-							return distance(o1.first, s.first).compareTo(distance(o1.first,s.first));
-						}
-					});
-					
-					if(distance(as.get(0).first, s.first) <distance(as.get(0).first, c)) {
-						e.creaConexion(as.get(0).first, s.first);
-						s.second=s.second-1;
-						if(s.second<=0) 
-							connectados.remove(s);
-					}
-					else {
-						e.creaConexion(as.get(0).first, c);
-					}
-					as.get(0).second = as.get(0).second-1;
-					connectados.add(as.get(0));
-					as.remove(0);
-					sc = connectados.iterator();
-				}
-				as.addAll(cluster.getCoste1());
 				while(sc.hasNext() && !as.isEmpty()) {
 					Pair<Sensor,Integer> s= sc.next();
 					as.sort(new Comparator<Pair<Sensor, Integer>>() {

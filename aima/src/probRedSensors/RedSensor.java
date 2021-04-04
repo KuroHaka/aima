@@ -43,4 +43,14 @@ public class RedSensor {
 		
 	}
 	
+	public int maxCapacidad() {
+		int acc = 0;
+		
+		Iterator<Sensor> it = this.sensores.iterator();
+		while(it.hasNext()) {
+			acc += (int)it.next().getCapacidad();
+		}
+		return acc;
+	}
+	
 }
