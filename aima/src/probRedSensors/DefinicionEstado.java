@@ -8,7 +8,7 @@ import IA.Red.Sensor;
 
 //Author: Ginesta Basart
 
-public class DefinicionEstado {
+public class DefinicionEstado{
 	
 	//Implementacion del estado
 	private RedSensor redSensor;
@@ -22,6 +22,17 @@ public class DefinicionEstado {
 		numCentros = redsensor.getCentros().size();
 		int dim = size();
 		estado = new int[dim][dim];
+	}
+	
+	public DefinicionEstado(DefinicionEstado d){
+		this.redSensor = d.redSensor;
+		numSensores = redSensor.getSensor().size();
+		numCentros = redSensor.getCentros().size();
+		int dim = size();
+		estado = new int[dim][dim];
+		for(int i=0; i<dim; i++)
+			  for(int j=0; j<dim; j++)
+			    this.estado[i][j]=d.estado[i][j];
 	}
 	
 	public int[][] actual(){
@@ -70,37 +81,69 @@ public class DefinicionEstado {
 	
 	//Implementacion de los operadores conectar-desconectar
 	
+	public boolean esConnectable (int elem1, int elem2) {
+		if (estado[elem1][elem2] == 1 && estado[elem2][elem1] == 1)
+			System.out.println("No: ja connectat");
+		else if (elem1 == elem2) 
+			System.out.println("No:elem1 == elem2 ");
+		else if (elem1 >= numSensores && elem2 >= numSensores)
+			System.out.println("No:centres ");
+		else if (((elem1 < numSensores && this.sumaConexiones(elem1) == 3) || (elem2 < numSensores && this.sumaConexiones(elem2) == 3)) && 
+				((elem1 >= numSensores && this.sumaConexiones(elem1) == 25) || (elem2 >= numSensores && this.sumaConexiones(elem2) == 25))) 
+			System.out.println("No:limite ");
+		else if (this.esHijo(elem1, elem2, new Stack<Integer>()))
+			System.out.println("No:hijos ");
+		else
+			return true;
+		return false;
+	}
+	
+	
+	public boolean EliminarPadreYConnectar(int elem1, int elem2) {
+		if(esConnectable(elem1, elem2)) {
+			eliminaConexionPadre(elem1);
+			nuevaConexionForzada(elem1, elem2);
+			return true;
+		}
+		return false;
+	}
+	
+	public void nuevaConexionForzada(int elem1, int elem2) {
+		//canvia un bit 0 del estado a 1
+		estado[elem1][elem2] = 1;
+		estado[elem2][elem1] = 1;
+	}
+	
 	public boolean nuevaConexion(int elem1, int elem2) {
 		//canvia un bit 0 del estado a 1
-		if (elem1 == elem2) System.out.print("No.");
-		else if (this.esHijo(elem1, elem2, new Stack<Integer>(), false)) {
-			System.out.print("No.");
+		if (elem1 == elem2) System.out.println("No:elem1 == elem2 ");
+		else if (this.esHijo(elem1, elem2, new Stack<Integer>())) {
 		}
 		else if (((elem1 <= numSensores && this.sumaConexiones(elem1) == 3) || (elem2 <= numSensores && this.sumaConexiones(elem2) == 3)) && 
-				((elem1 > numSensores && this.sumaConexiones(elem1) == 25) || (elem2 > numSensores && this.sumaConexiones(elem2) == 25))) System.out.print("No.");
+				((elem1 > numSensores && this.sumaConexiones(elem1) == 25) || (elem2 > numSensores && this.sumaConexiones(elem2) == 25))) System.out.println("No:imite ");
 		else {
 			if (estado[elem1][elem2] == 0 && estado[elem2][elem1] == 0) {
 				estado[elem1][elem2] = 1;
 				estado[elem2][elem1] = 1;
 				return true;
 			}
-			else System.out.print("No.");
+			else System.out.println("No: ja connectat");
 		}
 		return false;
 	}
 	
 	public boolean creaConexion(int elem1, int elem2) {
 		//canvia un bit 0 del estado a 1
-		if (elem1 == elem2) System.out.print("No.");
+		if (elem1 == elem2) System.out.println("No:elem1 == elem2 ");
 		else if (((elem1 <= numSensores && this.sumaConexiones(elem1) == 3) || (elem2 <= numSensores && this.sumaConexiones(elem2) == 3)) && 
-				((elem1 > numSensores && this.sumaConexiones(elem1) == 25) || (elem2 > numSensores && this.sumaConexiones(elem2) == 25))) System.out.print("No.");
+				((elem1 > numSensores && this.sumaConexiones(elem1) == 25) || (elem2 > numSensores && this.sumaConexiones(elem2) == 25))) System.out.println("No:imite ");
 		else {
 			if (estado[elem1][elem2] == 0 && estado[elem2][elem1] == 0) {
 				estado[elem1][elem2] = 1;
 				estado[elem2][elem1] = 1;
 				return true;
 			}
-			else System.out.print("No.");
+			else System.out.println("No:ja connectat ");
 		}
 		return false;
 	}
@@ -115,7 +158,6 @@ public class DefinicionEstado {
 	public boolean eliminaConexion(int elem1, int elem2) {
 		//canvia un bit 1 del estado a 0
 		if (elem1 == elem2) System.out.print("No.");
-		else if (this.sumaConexiones(elem1) == 1 && this.sumaConexiones(elem2) == 1) System.out.print("No.");
 		else {
 			if (estado[elem1][elem2] == 1 && estado[elem2][elem1] == 1) {
 				estado[elem1][elem2] = 0;
@@ -126,18 +168,39 @@ public class DefinicionEstado {
 		}
 		return false;
 	}
+	
+	public void eliminaConexionForzada(int elem1, int elem2) {
+		//canvia un bit 1 del estado a 0
+		estado[elem1][elem2] = 0;
+		estado[elem2][elem1] = 0;
+	}
 
+	private boolean esHijo(int elem1, int elem2, Stack<Integer> visitado) {
+		
+		for(int i = 0; i < this.size(); i++) {
+			if (estado[elem2][i] == 1 && !visitado.contains(i)) {
+					if (i == elem1) return true;
+					visitado.add(elem2);
+					if(esHijo(elem1, i, visitado)) return true;		
+			}
+		}
+		return false;
+		//si es false los hijos de elem1 no tendran ningún padre aka centro de datos
+	}
+	
 	public void eliminaConexionPadre(int elem1) {
 		//elimina una conexión de elem1 de forma que sus hijos sigan conectados a un centro de datos
 		for(int i = 0; i < this.size(); i++) {
 
 			if (estado[elem1][i] == 1) {
-				if(i > numSensores) {
-					this.eliminaConexion(elem1, i);
+				if(i >= numSensores) {
+					this.eliminaConexionForzada(elem1, i);
 					return; 
 				}
 				else {
-					if (eliminaConexionPadre(elem1, new Stack<Integer>())) {
+					Stack <Integer> s = new Stack<>();
+					s.add(elem1);
+					if (eliminaConexionPadre(i, s)) {
 						this.eliminaConexion(elem1, i);
 						return;
 					}
@@ -146,32 +209,20 @@ public class DefinicionEstado {
 		}
 	}
 		
-	private boolean esHijo(int elem1, int elem2, Stack<Integer> visitado, boolean foundCentro) {
-		
-		for(int i = 0; i < this.size(); i++) {
-			if (estado[elem1][i] == 1 && !visitado.contains(i)) {
-				if(i > numSensores) foundCentro = true;
-				else {
-					visitado.add(i);
-					if (i == elem2) return false;
-					if(!esHijo(i, elem2, visitado, foundCentro)) return false;	
-				}		
-			}
-		}
-		return foundCentro;
-		//si es false los hijos de elem1 no tendran ningún padre aka centro de datos
-	}
+	
 	
 	private boolean eliminaConexionPadre(int elem1, Stack<Integer> visitado) {
 		
 		for(int i = 0; i < this.size(); i++) {
 
 			if (estado[elem1][i] == 1 && !visitado.contains(i)) {
-				if(i > numSensores) return true; 
+				if(i >= numSensores) {
+					return true; 
+				}
 				
 				else {
-					visitado.add(i);
-					if (eliminaConexionPadre(elem1,visitado)) {
+					visitado.add(elem1);
+					if (eliminaConexionPadre(i,visitado)) {
 						return true;
 					}
 				}		
