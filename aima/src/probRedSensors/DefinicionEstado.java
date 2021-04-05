@@ -88,8 +88,8 @@ public class DefinicionEstado{
 			System.out.println("No:elem1 == elem2 ");
 		else if (elem1 >= numSensores && elem2 >= numSensores)
 			System.out.println("No:centres ");
-		else if (((elem1 < numSensores && this.sumaConexiones(elem1) == 3) || (elem2 < numSensores && this.sumaConexiones(elem2) == 3)) && 
-				((elem1 >= numSensores && this.sumaConexiones(elem1) == 25) || (elem2 >= numSensores && this.sumaConexiones(elem2) == 25))) 
+		else if (((elem1 < numSensores && this.sumaConexiones(elem1) >= 3) || (elem2 < numSensores && this.sumaConexiones(elem2) >= 3)) || 
+				((elem1 >= numSensores && this.sumaConexiones(elem1) >= 25) || (elem2 >= numSensores && this.sumaConexiones(elem2) >= 25))) 
 			System.out.println("No:limite ");
 		else if (this.esHijo(elem1, elem2, new Stack<Integer>()))
 			System.out.println("No:hijos ");

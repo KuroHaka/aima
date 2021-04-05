@@ -7,131 +7,49 @@ import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.List;
 
-//Author: Liangwei Dong
+//Author: Zhensheng Chen
 
 public class GeneradorSucesoresHillClimbing implements SuccessorFunction {
 	
 	//Implentacion de la generacion de sucesores para Hill Climbing
-	public List getSuccessors(Object aState) {
+	public List getSuccessors(Object state) {
 		
-		ArrayList <Successor>r = new ArrayList<>();
-		DefinicionEstado e = (DefinicionEstado) aState;
+		List <Successor> s = new ArrayList<>();
+		DefinicionEstado e = (DefinicionEstado) state;
+		RedSensor r = e.getRedSensor();
 		
 		int size = e.size();
 		int nSensors = e.numSensores();
 		
+		//iterador de sensores
 		for(int i = 0; i < nSensors; i++) {
-			for(int j = i+1; j < nSensors; j++) {
-				if (e.getConexion(i, j) == 0) {
-					if (e.sumaConexiones(i) >= 3) {
-						for(int k = 0; k < size; ++k) {
-							if (e.getConexion(i, k) == 1) {
-								if (e.sumaConexiones(j) >= 3) {
-									for(int l = 0; l < size; ++l) {
-										if (e.getConexion(j, l) == 1) {
-											DefinicionEstado suc_e = new DefinicionEstado (e);
-											if (suc_e.esConnectable(i, j)) {
-												suc_e.nuevaConexionForzada(i, j);
-												suc_e.eliminaConexionForzada(i, k);
-												suc_e.eliminaConexionForzada(j, l);
-												r.add(new Successor(i+"amb"+j, suc_e));
-											}
-										}
-									}
-								}
-								else {
-									DefinicionEstado suc_e = new DefinicionEstado (e);
-									if (suc_e.esConnectable(i, j)) {
-										suc_e.nuevaConexionForzada(i, j);
-										suc_e.eliminaConexionForzada(i, k);
-										r.add(new Successor(i+"amb"+j, suc_e));
-									}
-								}
-							}
-						}
-					}
-					else if (e.sumaConexiones(j) >= 3) {
-						for(int l = 0; l < size; ++l) {
-							if (e.getConexion(j, l) == 1) {
-								DefinicionEstado suc_e = new DefinicionEstado (e);
-								if (suc_e.esConnectable(i, j)) {
-									suc_e.nuevaConexionForzada(i, j);
-									suc_e.eliminaConexionForzada(j, l);
-									r.add(new Successor(i+"amb"+j, suc_e));
-								}
-							}
-						}
-					}
-					else {
-						DefinicionEstado suc_e = new DefinicionEstado (e);
-						if (suc_e.esConnectable(i, j)) {
-							suc_e.nuevaConexionForzada(i, j);
-							r.add(new Successor(i+"amb"+j, aState));
-						}
-					}
-				}
-				else if (e.sumaConexiones(i) > 1 && e.sumaConexiones(j) > 1){
-					DefinicionEstado suc_e = new DefinicionEstado (e);
-					suc_e.eliminaConexion(i, j);//!!!
-					r.add(new Successor(i+"sense"+j, suc_e));
-				}
-			}
-			for(int j = nSensors; j < size; j++) {
-				if (e.getConexion(i, j) == 0) {
-					if (e.sumaConexiones(i) >= 3) {
-						for(int k = 0; k < size; ++k) {
-							if (e.getConexion(i, k) == 1) {
-								if (e.sumaConexiones(j) >= 25) {
-									for(int l = 0; l < size; ++l) {
-										if (e.getConexion(j, l) == 1) {
-											DefinicionEstado suc_e = new DefinicionEstado (e);
-											if (suc_e.esConnectable(i, j)) {
-												suc_e.nuevaConexionForzada(i, j);
-												suc_e.eliminaConexionForzada(i, k);
-												suc_e.eliminaConexionForzada(j, l);
-												r.add(new Successor(i+"amb"+j, suc_e));
-											}
-										}
-									}
-								}
-								else {
-									DefinicionEstado suc_e = new DefinicionEstado (e);
-									if (suc_e.esConnectable(i, j)) {
-										suc_e.nuevaConexionForzada(i, j);
-										suc_e.eliminaConexionForzada(i, k);
-										r.add(new Successor(i+"amb"+j, suc_e));
-									}
-								}
-							}
-						}
-					}
-					else if (e.sumaConexiones(j) >= 25) {
-						for(int l = 0; l < size; ++l) {
-							if (e.getConexion(j, l) == 1) {
-								DefinicionEstado suc_e = new DefinicionEstado (e);
-								if (suc_e.esConnectable(i, j)) {
-									suc_e.nuevaConexionForzada(i, j);
-									suc_e.eliminaConexionForzada(j, l);
-									r.add(new Successor(i+"amb"+j, suc_e));
-								}
-							}
-						}
-					}
-					else {
-						DefinicionEstado suc_e = new DefinicionEstado (e);
-						if (suc_e.nuevaConexion(i, j)) {
-							r.add(new Successor(i+"amb"+j, suc_e));
-						}
-					}
-				}
-				else if (e.sumaConexiones(i) > 1 && e.sumaConexiones(j) > 1){
-					DefinicionEstado suc_e = new DefinicionEstado (e);
-					suc_e.eliminaConexion(i, j);
-					r.add(new Successor(i+"amb"+j, suc_e));
-				}
+			//iterador de componentes
+			for(int j = 0; j < size; j++) {
+				DefinicionEstado newE = new DefinicionEstado(e);
+				if(newE.EliminarPadreYConnectar(i, j))
+					s.add(new Successor(i+"con"+j, newE));
 			}
 		}
 		
-		return r;
+		for(int i = 0; i < s.size(); i++) {
+			//plot(s,i);
+		}
+		
+		
+		return s;
+	}
+	
+	public void plot(List <Successor> s, int i) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					RedSensorJFrame frame = new RedSensorJFrame((DefinicionEstado)s.get(i).getState()); //<-----------------esta linia pinta el grafo :3
+					frame.setTitle("Hill Climbing2");
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 }
