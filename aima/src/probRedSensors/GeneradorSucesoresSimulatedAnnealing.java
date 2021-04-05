@@ -34,18 +34,6 @@ public class GeneradorSucesoresSimulatedAnnealing implements SuccessorFunction {
 				found = e.EliminarPadreYConnectar(elem1, (nS-1)+elem2%c);
 			if (found) sucesor.add(new Successor(""+elem1+","+elem2, e));
 		}
-
-		 EventQueue.invokeLater(new Runnable() {
-				public void run() {
-					try {
-						RedSensorJFrame frame = new RedSensorJFrame(e); //<-----------------esta linia pinta el grafo :3
-						frame.setTitle("intento Simulated Annealing");
-						frame.setVisible(true);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			});
 		 
 		return sucesor;
 	}

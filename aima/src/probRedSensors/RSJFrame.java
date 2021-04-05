@@ -28,10 +28,10 @@ public class RSJFrame extends JFrame {
 
 	private JPanel contentPane;
 	private GraphChartPanel redSensores;
-	private int ncent = 0;
-	private int cseed = 0;
-	private int nsens = 0;
-	private int sseed = 0;
+	private int ncent = 1;
+	private int cseed = 1234;
+	private int nsens = 1;
+	private int sseed = 4321;
 	private int ini = 1;
 	private int heu = 1;
 	private int algo = 1;

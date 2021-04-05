@@ -1,5 +1,6 @@
 package probRedSensors;
 
+import aima.search.framework.Successor;
 import aima.search.framework.SuccessorFunction;
 
 import java.awt.EventQueue;
@@ -13,7 +14,7 @@ public class GeneradorSucesoresHillClimbing implements SuccessorFunction {
 	//Implentacion de la generacion de sucesores para Hill Climbing
 	public List getSuccessors(Object aState) {
 		
-		ArrayList <DefinicionEstado>r = new ArrayList<>();
+		ArrayList <Successor>r = new ArrayList<>();
 		DefinicionEstado e = (DefinicionEstado) aState;
 		
 		int size = e.size();
@@ -33,7 +34,7 @@ public class GeneradorSucesoresHillClimbing implements SuccessorFunction {
 												suc_e.nuevaConexionForzada(i, j);
 												suc_e.eliminaConexionForzada(i, k);
 												suc_e.eliminaConexionForzada(j, l);
-												r.add(suc_e);
+												r.add(new Successor(i+"amb"+j, suc_e));
 											}
 										}
 									}
@@ -43,7 +44,7 @@ public class GeneradorSucesoresHillClimbing implements SuccessorFunction {
 									if (suc_e.esConnectable(i, j)) {
 										suc_e.nuevaConexionForzada(i, j);
 										suc_e.eliminaConexionForzada(i, k);
-										r.add(suc_e);
+										r.add(new Successor(i+"amb"+j, suc_e));
 									}
 								}
 							}
@@ -56,7 +57,7 @@ public class GeneradorSucesoresHillClimbing implements SuccessorFunction {
 								if (suc_e.esConnectable(i, j)) {
 									suc_e.nuevaConexionForzada(i, j);
 									suc_e.eliminaConexionForzada(j, l);
-									r.add(suc_e);
+									r.add(new Successor(i+"amb"+j, suc_e));
 								}
 							}
 						}
@@ -65,14 +66,14 @@ public class GeneradorSucesoresHillClimbing implements SuccessorFunction {
 						DefinicionEstado suc_e = new DefinicionEstado (e);
 						if (suc_e.esConnectable(i, j)) {
 							suc_e.nuevaConexionForzada(i, j);
-							r.add(suc_e);
+							r.add(new Successor(i+"amb"+j, aState));
 						}
 					}
 				}
 				else if (e.sumaConexiones(i) > 1 && e.sumaConexiones(j) > 1){
 					DefinicionEstado suc_e = new DefinicionEstado (e);
 					suc_e.eliminaConexion(i, j);//!!!
-					r.add(suc_e);
+					r.add(new Successor(i+"sense"+j, suc_e));
 				}
 			}
 			for(int j = nSensors; j < size; j++) {
@@ -88,7 +89,7 @@ public class GeneradorSucesoresHillClimbing implements SuccessorFunction {
 												suc_e.nuevaConexionForzada(i, j);
 												suc_e.eliminaConexionForzada(i, k);
 												suc_e.eliminaConexionForzada(j, l);
-												r.add(suc_e);
+												r.add(new Successor(i+"amb"+j, suc_e));
 											}
 										}
 									}
@@ -98,7 +99,7 @@ public class GeneradorSucesoresHillClimbing implements SuccessorFunction {
 									if (suc_e.esConnectable(i, j)) {
 										suc_e.nuevaConexionForzada(i, j);
 										suc_e.eliminaConexionForzada(i, k);
-										r.add(suc_e);
+										r.add(new Successor(i+"amb"+j, suc_e));
 									}
 								}
 							}
@@ -111,7 +112,7 @@ public class GeneradorSucesoresHillClimbing implements SuccessorFunction {
 								if (suc_e.esConnectable(i, j)) {
 									suc_e.nuevaConexionForzada(i, j);
 									suc_e.eliminaConexionForzada(j, l);
-									r.add(suc_e);
+									r.add(new Successor(i+"amb"+j, suc_e));
 								}
 							}
 						}
@@ -119,14 +120,14 @@ public class GeneradorSucesoresHillClimbing implements SuccessorFunction {
 					else {
 						DefinicionEstado suc_e = new DefinicionEstado (e);
 						if (suc_e.nuevaConexion(i, j)) {
-							r.add(suc_e);
+							r.add(new Successor(i+"amb"+j, suc_e));
 						}
 					}
 				}
 				else if (e.sumaConexiones(i) > 1 && e.sumaConexiones(j) > 1){
 					DefinicionEstado suc_e = new DefinicionEstado (e);
 					suc_e.eliminaConexion(i, j);
-					r.add(suc_e);
+					r.add(new Successor(i+"amb"+j, suc_e));
 				}
 			}
 		}
