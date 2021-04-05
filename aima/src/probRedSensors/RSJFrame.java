@@ -8,8 +8,16 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import aima.search.framework.Problem;
+import aima.search.framework.Search;
+import aima.search.framework.SearchAgent;
+import aima.search.informed.HillClimbingSearch;
+import aima.search.informed.SimulatedAnnealingSearch;
+
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import java.awt.FlowLayout;
@@ -23,6 +31,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.Component;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.JTextArea;
+import javax.swing.UIManager;
+import java.awt.SystemColor;
+import javax.swing.Box;
 
 public class RSJFrame extends JFrame {
 
@@ -46,6 +59,15 @@ public class RSJFrame extends JFrame {
 	private JRadioButton simulated;
 	private JSlider sSensor;
 	private JSlider scentre;
+	private JPanel graf;
+	private DefinicionEstado e;
+	private JTextField iteraciones;
+	private JTextField temperatura;
+	private JTextField k;
+	private JTextField lambda;
+	private JTextArea txtData;
+	
+	private Heuristica3 heu3;
 	
 
 	/**
@@ -72,13 +94,17 @@ public class RSJFrame extends JFrame {
 	 */
 	public RSJFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		JPanel background = new JPanel();
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
+		setContentPane(background);
+		background.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
-		JPanel graf = new JPanel();
-		
+		background.add(contentPane);
+		graf = new JPanel();
+	    
+	    
 		contentPane.add(graf);
 		
 		JPanel top = new JPanel();
@@ -94,7 +120,7 @@ public class RSJFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				actualizar();
-				mostrarGrafica(graf);
+				mostrarGrafica();
 			}
 		});
 		
@@ -106,7 +132,7 @@ public class RSJFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				actualizar();
-				mostrarGrafica(graf);
+				mostrarGrafica();
 			}
 		});
 		
@@ -127,7 +153,7 @@ public class RSJFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				actualizar();
-				mostrarGrafica(graf);
+				mostrarGrafica();
 			}
 		});
 		
@@ -139,7 +165,7 @@ public class RSJFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				actualizar();
-				mostrarGrafica(graf);
+				mostrarGrafica();
 			}
 		});
 		h3 = new JRadioButton("Heur\u00EDstica 3");
@@ -150,7 +176,7 @@ public class RSJFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				actualizar();
-				mostrarGrafica(graf);
+				mostrarGrafica();
 			}
 		});
 		
@@ -172,7 +198,7 @@ public class RSJFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				actualizar();
-				mostrarGrafica(graf);
+				mostrarGrafica();
 			}
 		});
 		
@@ -184,7 +210,7 @@ public class RSJFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				actualizar();
-				mostrarGrafica(graf);
+				mostrarGrafica();
 			}
 		});
 		
@@ -212,14 +238,14 @@ public class RSJFrame extends JFrame {
 			public void keyTyped(KeyEvent e) {
 				// TODO Auto-generated method stub
 				actualizar();
-				mostrarGrafica(graf);
+				mostrarGrafica();
 			}
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
 				// TODO Auto-generated method stub
 				actualizar();
-				mostrarGrafica(graf);
+				mostrarGrafica();
 			}
 			
 			@Override
@@ -244,14 +270,14 @@ public class RSJFrame extends JFrame {
 			public void keyTyped(KeyEvent e) {
 				// TODO Auto-generated method stub
 				actualizar();
-				mostrarGrafica(graf);
+				mostrarGrafica();
 			}
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
 				// TODO Auto-generated method stub
 				actualizar();
-				mostrarGrafica(graf);
+				mostrarGrafica();
 			}
 			
 			@Override
@@ -285,7 +311,6 @@ public class RSJFrame extends JFrame {
 		left.add(vcentres);
 		
 		scentre = new JSlider();
-		scentre.setMaximum(200);
 		scentre.setValue(1);
 		scentre.setOrientation(SwingConstants.VERTICAL);
 		scentre.setMinimum(1);
@@ -296,7 +321,7 @@ public class RSJFrame extends JFrame {
 			public void stateChanged(ChangeEvent e) {
 				vcentres.setText("     "+scentre.getValue());
 				actualizar();
-				mostrarGrafica(graf);
+				mostrarGrafica();
 			}
 		});
 		panel.add(scentre);
@@ -320,7 +345,7 @@ public class RSJFrame extends JFrame {
 		right.add(vSensors);
 		
 		sSensor = new JSlider();
-		sSensor.setMaximum(500);
+		sSensor.setMaximum(200);
 		sSensor.setValue(1);
 		sSensor.setPaintLabels(true);
 		sSensor.setOrientation(SwingConstants.VERTICAL);
@@ -332,21 +357,109 @@ public class RSJFrame extends JFrame {
 			public void stateChanged(ChangeEvent e) {
 				vSensors.setText("   "+sSensor.getValue());
 				actualizar();
-				mostrarGrafica(graf);
+				mostrarGrafica();
 			}
 		});
 		panel_1.add(sSensor);
 		
+		JPanel data = new JPanel();
+		background.add(data);
+		data.setLayout(new BoxLayout(data, BoxLayout.Y_AXIS));
+		
+		JPanel panel_2 = new JPanel();
+		data.add(panel_2);
+		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		JLabel labelit = new JLabel("    Iteraciones:");
+		labelit.setHorizontalAlignment(SwingConstants.LEFT);
+		panel_2.add(labelit);
+		
+		iteraciones = new JTextField();
+		iteraciones.setText("450");
+		iteraciones.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_2.add(iteraciones);
+		iteraciones.setColumns(10);
+		
+		Component horizontalStrut = Box.createHorizontalStrut(20);
+		panel_2.add(horizontalStrut);
+		
+		JPanel panel_3 = new JPanel();
+		data.add(panel_3);
+		panel_3.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		JLabel lblNewLabel_1 = new JLabel("Temperatura:");
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.LEFT);
+		panel_3.add(lblNewLabel_1);
+		
+		temperatura = new JTextField();
+		temperatura.setText("61");
+		temperatura.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_3.add(temperatura);
+		temperatura.setColumns(10);
+		
+		Component horizontalStrut_1 = Box.createHorizontalStrut(20);
+		panel_3.add(horizontalStrut_1);
+		
+		JPanel panel_4 = new JPanel();
+		data.add(panel_4);
+		panel_4.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		JLabel labelk = new JLabel("                      K:");
+		labelk.setHorizontalAlignment(SwingConstants.LEFT);
+		panel_4.add(labelk);
+		
+		k = new JTextField();
+		k.setText("24");
+		k.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_4.add(k);
+		k.setColumns(10);
+		
+		Component horizontalStrut_2 = Box.createHorizontalStrut(20);
+		panel_4.add(horizontalStrut_2);
+		
+		JPanel panel_5 = new JPanel();
+		data.add(panel_5);
+		panel_5.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		JLabel labellamb = new JLabel("          Lambda:");
+		labellamb.setHorizontalAlignment(SwingConstants.LEFT);
+		panel_5.add(labellamb);
+		
+		lambda = new JTextField();
+		lambda.setText("0.1");
+		lambda.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_5.add(lambda);
+		lambda.setColumns(10);
+		
+		Component horizontalStrut_3 = Box.createHorizontalStrut(20);
+		panel_5.add(horizontalStrut_3);
+		
+		Component verticalStrut = Box.createVerticalStrut(300);
+		data.add(verticalStrut);
+		
+		Component verticalStrut_1 = Box.createVerticalStrut(300);
+		data.add(verticalStrut_1);
+		
+		txtData = new JTextArea();
+		txtData.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		txtData.setText("Coste transmisi\u00F3n:                              \r\nAprovechamiento total:                     \r\nPerdida total de datos:                        \r\nRatio:                                                     ");
+		txtData.setTabSize(10);
+		txtData.setRows(5);
+		txtData.setBackground(SystemColor.menu);
+		data.add(txtData);
+		
 		ejecutar.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e1) {
 				// TODO Auto-generated method stub
-				actualizar();
-				mostrarGrafica(graf);
+				ejecutar();
 			}
 			
 		});
-		mostrarGrafica(graf);
+		mostrarGrafica();
+		
+		sSensor.setValue(100);
+		scentre.setValue(4);
 	}
 	
 	private void actualizar() {
@@ -370,20 +483,98 @@ public class RSJFrame extends JFrame {
 		this.cseed = Integer.parseInt(this.tsCentros.getText());
 	}
 	
-	
-	private void mostrarGrafica(JPanel p) {
-		p.removeAll();
+	private void mostrarGrafica() {
+		graf.removeAll();
 		RedSensor rd = new RedSensor(this.ncent, this.cseed, this.nsens, this.sseed);
-		DefinicionEstado de = new DefinicionEstado(rd);
-		GeneradorSolucionInicial gsi = new GeneradorSolucionInicial(de);
+		e = new DefinicionEstado(rd);
+		GeneradorSolucionInicial gsi = new GeneradorSolucionInicial(e);
 		if(ini == 1)
-			gsi.generaSolucionInicial1(de);
+			gsi.generaSolucionInicial1(e);
 		else
-			gsi.generaSolucionInicial2(de);
-		GraphChartPanel gcp = new GraphChartPanel(de);
-		p.add(gcp);
-		p.setVisible(false);
-		p.setVisible(true);
+			gsi.generaSolucionInicial2(e);
+		
+		GraphChartPanel gcp = new GraphChartPanel(e);
+		graf.add(gcp);
+		graf.setVisible(false);
+		graf.setVisible(true);
+		printData();
 	}
+	
+	private void RedSimulatedAnnealingSearch() {   
+		Problem problem = null;
+		switch(heu) {
+		case 1: 
+			problem  =  new Problem(e,new GeneradorSucesoresSimulatedAnnealing(), new RedGoalTest(),new Heuristica1());
+			break;
+		case 2: 
+			problem =  new Problem(e,new GeneradorSucesoresSimulatedAnnealing(), new RedGoalTest(),new Heuristica2());
+			break;
+		default: 
+			problem =  new Problem(e,new GeneradorSucesoresSimulatedAnnealing(), new RedGoalTest(),new Heuristica3());
+			break;
+		}
+    	SimulatedAnnealingSearch search =  new SimulatedAnnealingSearch(Integer.parseInt(iteraciones.getText()),
+    																	Integer.parseInt(temperatura.getText()),
+    																	Integer.parseInt(k.getText()),
+    																	Double.parseDouble(lambda.getText()));
+        //search.traceOn();
+        try {
+			SearchAgent agent = new SearchAgent(problem,search);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+        e = (DefinicionEstado) search.getGoalState();   
+    }
+	
+	private void RedHillClimbingSearch() {
+		Problem problem = null;
+		switch(heu) {
+		case 1: 
+			problem  =  new Problem(e,new GeneradorSucesoresHillClimbing(), new RedGoalTest(),new Heuristica1());
+		break;
+		case 2: 
+			problem =  new Problem(e,new GeneradorSucesoresHillClimbing(), new RedGoalTest(),new Heuristica2());
+		break;
+		default: 
+			problem =  new Problem(e,new GeneradorSucesoresHillClimbing(), new RedGoalTest(),new Heuristica3());
+		break;
+		}
+        Search search =  new HillClimbingSearch();
+        try {
+			SearchAgent agent = new SearchAgent(problem,search);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+        e = (DefinicionEstado) search.getGoalState();
+    }
+	
+	private void ejecutar() {
+		actualizar();
+		graf.removeAll();
+		switch (algo) {
+		case 1:
+			RedSimulatedAnnealingSearch();
+			break;
+		default:
+			RedHillClimbingSearch();
+			break;
+		}
+		GraphChartPanel gcp = new GraphChartPanel(e);
+		graf.add(gcp);
+		graf.setVisible(false);
+		graf.setVisible(true);
+		printData();
+	}
+	
+	private void printData() {
+		Heuristica1 h1 = new Heuristica1();
+		Heuristica2 h2 = new Heuristica2();
+		heu3 = new Heuristica3();
+		txtData.setText("Coste transmisi\u00F3n:  "+h1.getHeuristicValue(e)
+						+"\r\nAprovechamiento total:  "+(e.getRedSensor().maxCapacidad()-h2.getHeuristicValue(e))
+						+"\r\nPerdida total de datos:  "+h2.getHeuristicValue(e)
+						+"\r\nRatio:  "+heu3.getHeuristicValue(e));
+	}
+	
 
 }

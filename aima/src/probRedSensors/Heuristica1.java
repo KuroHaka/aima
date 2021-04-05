@@ -46,7 +46,7 @@ public class Heuristica1 implements HeuristicFunction{
 			}
 		}
 		
-		return (-1)*estimador;
+		return estimador;
 	}
 	
 	private int distancia(int[] elem1, int[] elem2) {

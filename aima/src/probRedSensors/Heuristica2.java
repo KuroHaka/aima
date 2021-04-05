@@ -10,7 +10,7 @@ public class Heuristica2 implements HeuristicFunction{
 	@Override
 	public double getHeuristicValue(Object state) {
 		DefinicionEstado e = (DefinicionEstado) state;
-		return DFS(e.actual(),e);
+		return (e.getRedSensor().maxCapacidad()-DFS(e.actual(),e));
 	}
 	
 	private double DFS(int[][] m, DefinicionEstado d) {

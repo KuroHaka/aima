@@ -83,19 +83,18 @@ public class DefinicionEstado{
 	
 	public boolean esConnectable (int elem1, int elem2) {
 		if (estado[elem1][elem2] == 1 && estado[elem2][elem1] == 1)
-			System.out.println("No: ja connectat");
+			return false;
 		else if (elem1 == elem2) 
-			System.out.println("No:elem1 == elem2 ");
+			return false;
 		else if (elem1 >= numSensores && elem2 >= numSensores)
-			System.out.println("No:centres ");
+			return false;
 		else if (((elem1 < numSensores && this.sumaConexiones(elem1) >= 3) || (elem2 < numSensores && this.sumaConexiones(elem2) >= 3)) || 
 				((elem1 >= numSensores && this.sumaConexiones(elem1) >= 25) || (elem2 >= numSensores && this.sumaConexiones(elem2) >= 25))) 
-			System.out.println("No:limite ");
+			return false;
 		else if (this.esHijo(elem1, elem2, new Stack<Integer>()))
-			System.out.println("No:hijos ");
+			return false;
 		else
 			return true;
-		return false;
 	}
 	
 	
@@ -177,7 +176,7 @@ public class DefinicionEstado{
 
 	private boolean esHijo(int elem1, int elem2, Stack<Integer> visitado) {
 		
-		for(int i = 0; i < this.size(); i++) {
+		for(int i = 0; i < this.numSensores(); i++) {
 			if (estado[elem2][i] == 1 && !visitado.contains(i)) {
 					if (i == elem1) return true;
 					visitado.add(elem2);
@@ -190,7 +189,7 @@ public class DefinicionEstado{
 	
 	public void eliminaConexionPadre(int elem1) {
 		//elimina una conexión de elem1 de forma que sus hijos sigan conectados a un centro de datos
-		for(int i = 0; i < this.size(); i++) {
+		for(int i = 0; i < this.numSensores(); i++) {
 
 			if (estado[elem1][i] == 1) {
 				if(i >= numSensores) {
