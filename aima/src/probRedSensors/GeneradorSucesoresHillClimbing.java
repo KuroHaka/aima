@@ -131,40 +131,6 @@ public class GeneradorSucesoresHillClimbing implements SuccessorFunction {
 			}
 		}
 		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					RedSensorJFrame frame = new RedSensorJFrame(r.get(0)); //<-----------------esta linia pinta el grafo :3
-					frame.setTitle("Intento de HillClimbing");
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					RedSensorJFrame frame = new RedSensorJFrame(r.get(1)); //<-----------------esta linia pinta el grafo :3
-					frame.setTitle("Intento de HillClimbing");
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					RedSensorJFrame frame = new RedSensorJFrame(r.get(2)); //<-----------------esta linia pinta el grafo :3
-					frame.setTitle("Intento de HillClimbing");
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		
 		return r;
 	}
 }

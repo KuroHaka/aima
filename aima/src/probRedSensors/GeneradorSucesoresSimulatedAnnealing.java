@@ -13,7 +13,8 @@ public class GeneradorSucesoresSimulatedAnnealing implements SuccessorFunction {
 
 	@Override
 	public List getSuccessors(Object state) {
-		DefinicionEstado e = new DefinicionEstado((DefinicionEstado) state);
+		DefinicionEstado olde = (DefinicionEstado)state;
+		DefinicionEstado e = new DefinicionEstado(olde);
 		List<Successor> sucesor = new ArrayList<>();
 		
 		int nS = e.numSensores();
@@ -34,7 +35,18 @@ public class GeneradorSucesoresSimulatedAnnealing implements SuccessorFunction {
 			if (found) sucesor.add(new Successor(""+elem1+","+elem2, e));
 		}
 
-		
+		 EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						RedSensorJFrame frame = new RedSensorJFrame(e); //<-----------------esta linia pinta el grafo :3
+						frame.setTitle("intento Simulated Annealing");
+						frame.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+		 
 		return sucesor;
 	}
 

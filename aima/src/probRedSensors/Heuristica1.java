@@ -24,7 +24,7 @@ public class Heuristica1 implements HeuristicFunction{
 						//elem1 es un centros de dados
 						int aux[] = {e.getRedSensor().getCentros().get(i-e.numSensores()).getCoordX(), e.getRedSensor().getCentros().get(i-e.numSensores()).getCoordY()};
 						elem1 = aux;
-						capacidad = 125;
+						capacidad = 0;
 					}
 					else {
 						int aux[] = {e.getRedSensor().getSensor().get(i).getCoordX(), e.getRedSensor().getSensor().get(i).getCoordY()};
@@ -46,7 +46,7 @@ public class Heuristica1 implements HeuristicFunction{
 			}
 		}
 		
-		return estimador;
+		return (-1)*estimador;
 	}
 	
 	private int distancia(int[] elem1, int[] elem2) {

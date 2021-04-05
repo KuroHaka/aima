@@ -32,7 +32,7 @@ public class DefinicionEstado{
 		estado = new int[dim][dim];
 		for(int i=0; i<dim; i++)
 			  for(int j=0; j<dim; j++)
-			    this.estado[i][j]=d.estado[i][j];
+			    this.estado[i][j]=d.getConexion(i, j);
 	}
 	
 	public int[][] actual(){

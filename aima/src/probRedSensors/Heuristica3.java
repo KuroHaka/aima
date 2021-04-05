@@ -7,7 +7,8 @@ public class Heuristica3 implements HeuristicFunction{
 	@Override
 	public double getHeuristicValue(Object state) {
 		DefinicionEstado e = (DefinicionEstado) state;
-		return (new Heuristica2().getHeuristicValue(state) / new Heuristica1().getHeuristicValue(state));
+		System.out.println(new Heuristica2().getHeuristicValue(e)+"/"+(-1)*new Heuristica1().getHeuristicValue(e));
+		return (new Heuristica2().getHeuristicValue(e) / ((-1)*new Heuristica1().getHeuristicValue(e)));
 	}
 	
 }
